@@ -1,0 +1,71 @@
+package com.techaccelarators.ifind.controller;
+
+import com.techaccelarators.ifind.domain.ServiceType;
+import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeDto;
+import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
+import com.techaccelarators.ifind.service.ServiceTypeService;
+import com.techaccelarators.ifind.util.Response;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+@RestController
+@AllArgsConstructor
+@RequestMapping("/v1/service-type")
+public class ServiceTypeController {
+    private final ServiceTypeService serviceTypeService;
+
+    @PostMapping
+    public Response<ServiceTypeDto> createServiceType(@Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
+
+        ServiceType serviceType = serviceTypeService.createServiceType(serviceTypeRequest);
+        return new Response<ServiceTypeDto>().buildSuccessResponse("Service Type Created Successfully",
+                ServiceTypeDto.of(serviceType), HttpStatus.CREATED);
+    }
+
+    @PutMapping("{id}")
+    public Response<ServiceTypeDto> updateServiceType(@PathVariable Long id, @Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
+
+        ServiceType serviceType = serviceTypeService.updateServiceType(id,serviceTypeRequest);
+        return new Response<ServiceTypeDto>().buildSuccessResponse("Service Type Updated Successfully",
+                ServiceTypeDto.of(serviceType), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public Response<Page<ServiceTypeDto>> getAllServiceTypes(@PageableDefault Pageable pageable) {
+
+        Page<ServiceType> serviceTypes = serviceTypeService.getAllServiceTypes(pageable);
+        return new Response<Page<ServiceTypeDto>>().buildSuccessResponse("SUCCESS",
+                new PageImpl<>(ServiceTypeDto.of(serviceTypes.getContent()),pageable, serviceTypes.getTotalElements()), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public Response<ServiceTypeDto> getServiceTypeById(@PathVariable Long id) {
+
+        ServiceType serviceType = serviceTypeService.getServiceTypeById(id);
+        return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",
+                ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/{name}")
+    public Response<ServiceTypeDto> getServiceTypeByName(@PathVariable String name) {
+
+        ServiceType serviceType = serviceTypeService.getServiceTypeByName(name);
+        return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",
+                ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
+    }
+
+    @PutMapping("/{id}/status")
+    public Response<ServiceTypeDto> toggleServiceTypeStatus(@PathVariable Long id) {
+
+        ServiceType serviceType = serviceTypeService.toggleServiceTypeStatus(id);
+        return new Response<ServiceTypeDto>().buildSuccessResponse("ServiceType Status Updated Successfully",
+                ServiceTypeDto.of(serviceType), HttpStatus.OK);
+    }
+}
