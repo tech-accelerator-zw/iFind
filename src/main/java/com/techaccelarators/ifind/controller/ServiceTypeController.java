@@ -29,7 +29,7 @@ public class ServiceTypeController {
                 ServiceTypeDto.of(serviceType), HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public Response<ServiceTypeDto> updateServiceType(@PathVariable Long id, @Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
 
         ServiceType serviceType = serviceTypeService.updateServiceType(id,serviceTypeRequest);
@@ -53,8 +53,8 @@ public class ServiceTypeController {
                 ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
     }
 
-    @GetMapping("/{name}")
-    public Response<ServiceTypeDto> getServiceTypeByName(@PathVariable String name) {
+    @GetMapping("/name")
+    public Response<ServiceTypeDto> getServiceTypeByName(@RequestParam String name) {
 
         ServiceType serviceType = serviceTypeService.getServiceTypeByName(name);
         return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",

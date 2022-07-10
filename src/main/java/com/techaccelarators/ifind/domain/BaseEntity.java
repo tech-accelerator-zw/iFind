@@ -3,7 +3,6 @@ package com.techaccelarators.ifind.domain;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.domain.util.Audit;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,7 +11,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass

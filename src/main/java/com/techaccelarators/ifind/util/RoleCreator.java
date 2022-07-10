@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @Order(value = 1)
 public class RoleCreator implements CommandLineRunner {
@@ -23,13 +25,21 @@ public class RoleCreator implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Role adminRole = new Role();
-        adminRole.setName(adminRoleProperties.getName());
-        adminRole.setStatus(Status.ACTIVE);
-        roleRepository.save(adminRole);
+        Optional<Role> role = roleRepository.findByName("ROLE_ADMIN");
+        if(role.get().getName()==null){
+            adminRole.setName(adminRoleProperties.getName());
+            adminRole.setStatus(Status.ACTIVE);
+            roleRepository.save(adminRole);
+        }
+
 
         Role userRole = new Role();
-        userRole.setName(userRoleProperties.getName());
-        userRole.setStatus(Status.ACTIVE);
-        roleRepository.save(userRole);
+        Optional<Role> role2 = roleRepository.findByName("ROLE_USER");
+        if(role2.get().getName()==null){
+            userRole.setName(userRoleProperties.getName());
+            userRole.setStatus(Status.ACTIVE);
+            roleRepository.save(userRole);
+        }
+
     }
 }
