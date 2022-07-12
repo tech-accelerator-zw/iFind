@@ -25,21 +25,16 @@ public class RoleCreator implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Role adminRole = new Role();
-        Optional<Role> role = roleRepository.findByName("ROLE_ADMIN");
-        if(role.get().getName()==null){
-            adminRole.setName(adminRoleProperties.getName());
-            adminRole.setStatus(Status.ACTIVE);
-            roleRepository.save(adminRole);
-        }
+        adminRole.setName(adminRoleProperties.getName());
+        adminRole.setStatus(Status.ACTIVE);
+        roleRepository.save(adminRole);
+
 
 
         Role userRole = new Role();
-        Optional<Role> role2 = roleRepository.findByName("ROLE_USER");
-        if(role2.get().getName()==null){
-            userRole.setName(userRoleProperties.getName());
-            userRole.setStatus(Status.ACTIVE);
-            roleRepository.save(userRole);
-        }
+        userRole.setName(userRoleProperties.getName());
+        userRole.setStatus(Status.ACTIVE);
+        roleRepository.save(userRole);
 
     }
 }
