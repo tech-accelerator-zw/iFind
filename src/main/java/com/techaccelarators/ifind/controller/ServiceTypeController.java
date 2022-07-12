@@ -17,6 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1/service-type")
 public class ServiceTypeController {
     private final ServiceTypeService serviceTypeService;
