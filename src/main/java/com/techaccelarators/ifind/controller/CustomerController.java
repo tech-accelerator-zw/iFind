@@ -41,7 +41,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public Response<CustomerDto> getCustomerById(@PathVariable Long id) {
 
-        Customer customer = customerService.getCustomerById(id);
+        Customer customer = customerService.getById(id);
         return new Response<CustomerDto>().buildSuccessResponse("FOUND",
                 CustomerDto.of(customer), HttpStatus.FOUND);
     }
@@ -68,6 +68,19 @@ public class CustomerController {
         Customer customer = customerService.toggleCustomerStatus(id);
         return new Response<CustomerDto>().buildSuccessResponse("Customer Status Updated Successfully",
                 CustomerDto.of(customer), HttpStatus.OK);
+    }
+    @PutMapping("/{customerId}/service/{serviceId}")
+    public Response<?> assignCustomerToServiceType(@PathVariable Long customerId,@PathVariable Long serviceId){
+
+        customerService.assignCustomerToServiceType(customerId, serviceId);
+        return new Response<>().buildSuccessResponse("Assigned Customer to ServiceType",HttpStatus.OK);
+    }
+
+    @PutMapping("/{customerId}/branch/{branchId}")
+    public Response<?> addBranchToCustomer(@PathVariable Long customerId,@PathVariable Long branchId){
+
+        customerService.addBranchToCustomer(customerId, branchId);
+        return new Response<>().buildSuccessResponse("Assigned a Branch to a Customer",HttpStatus.OK);
     }
 
 }

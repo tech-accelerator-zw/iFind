@@ -14,4 +14,5 @@ import javax.persistence.Entity;
 @Builder
 public class ServiceType extends BaseEntity{
     private String name;
+    private String imageUrl;
 }

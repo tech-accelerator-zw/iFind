@@ -1,11 +1,17 @@
 package com.techaccelarators.ifind.service.impl;
 
 import com.techaccelarators.ifind.domain.Customer;
+import com.techaccelarators.ifind.domain.CustomerBranch;
+import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.customer.CustomerRequest;
+import com.techaccelarators.ifind.dtos.customer.CustomerResponseDto;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.repository.CustomerBranchRepository;
 import com.techaccelarators.ifind.repository.CustomerRepository;
+import com.techaccelarators.ifind.repository.CustomerServiceRepository;
+import com.techaccelarators.ifind.repository.ServiceTypeRepository;
 import com.techaccelarators.ifind.service.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +19,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @AllArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
+    private final ServiceTypeRepository serviceTypeRepository;
+    private final CustomerServiceRepository customerServiceRepository;
+    private final CustomerBranchRepository customerBranchRepository;
 
 
     @Override
@@ -39,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer updateCustomer(Long id, CustomerRequest customerRequest) {
 
-        Customer customer = getCustomerById(id);
+        Customer customer = getById(id);
         checkUnique(customerRequest, id);
         customer.setName(customerRequest.getName());
         customer.setAddress(customerRequest.getAddress());
@@ -51,10 +65,19 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
 
     }
+    public Customer getById(Long id){
+        return customerRepository.findById(id)
+                .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
+    }
 
     @Override
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Customer Not found"));
+    public CustomerResponseDto getCustomerById(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Customer Not found"));
+        List<CustomerBranch> customerBranches = customerBranchRepository.findAllByCustomer(customer);
+        Set<CustomerBranch> branches = new HashSet<>(customerBranches);
+        return CustomerResponseDto.of(customer,branches);
+
     }
 
     @Override
@@ -69,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer toggleCustomerStatus(Long id) {
-        Customer customer = getCustomerById(id);
+        Customer customer = getById(id);
 
         if (customer.getStatus() == Status.ACTIVE) {
             customer.setStatus(Status.INACTIVE);
@@ -77,6 +100,27 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setStatus(Status.ACTIVE);
         }
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public void assignCustomerToServiceType(Long customerId, Long serviceId) {
+        Customer customer = getById(customerId);
+        ServiceType serviceType = serviceTypeRepository.findById(serviceId)
+                .orElseThrow(()-> new RecordNotFoundException("ServiceType Not Found!!"));
+        com.techaccelarators.ifind.domain.CustomerService customerService = new com.techaccelarators.ifind.domain.CustomerService();
+        customerService.setCustomer(customer);
+        customerService.setServiceType(serviceType);
+        customerService.setStatus(Status.ACTIVE);
+
+        customerServiceRepository.save(customerService);
+    }
+    public void addBranchToCustomer(Long customerId,Long branchId){
+        Customer customer = getById(customerId);
+        CustomerBranch customerBranch = customerBranchRepository.findById(branchId)
+                .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
+        customerBranch.setCustomer(customer);
+
+        customerBranchRepository.save(customerBranch);
     }
 
 

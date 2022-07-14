@@ -3,6 +3,7 @@ package com.techaccelarators.ifind.controller;
 import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeDto;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
+import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;
 import com.techaccelarators.ifind.service.ServiceTypeService;
 import com.techaccelarators.ifind.util.Response;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -47,11 +49,10 @@ public class ServiceTypeController {
     }
 
     @GetMapping("/{id}")
-    public Response<ServiceTypeDto> getServiceTypeById(@PathVariable Long id) {
+    public Response<ServiceTypeResponseDto> getServiceTypeById(@PathVariable Long id) {
 
-        ServiceType serviceType = serviceTypeService.getServiceTypeById(id);
-        return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",
-                ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
+        return new Response<ServiceTypeResponseDto>().buildSuccessResponse("FOUND",
+                serviceTypeService.getServiceTypeById(id), HttpStatus.FOUND);
     }
 
     @GetMapping("/name")

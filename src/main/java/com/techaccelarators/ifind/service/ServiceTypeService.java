@@ -2,6 +2,8 @@ package com.techaccelarators.ifind.service;
 
 import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
+import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;
+import com.techaccelarators.ifind.repository.ServiceTypeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +12,7 @@ public interface ServiceTypeService {
 
     Page<ServiceType> getAllServiceTypes(Pageable pageable);
 
-    ServiceType getServiceTypeById(Long id);
+    ServiceTypeResponseDto getServiceTypeById(Long id);
 
     ServiceType getServiceTypeByName(String name);
 
