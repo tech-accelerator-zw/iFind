@@ -17,24 +17,23 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1/customer-branch")
 public class CustomerBranchController {
     private final CustomerBranchService customerBranchService;
 
-    @PostMapping
-    public Response<CustomerBranchDto> createCustomerBranch(@Valid @RequestBody CustomerBranchRequest customerBranchRequest) {
+    @PostMapping("{customerId}")
+    public Response<CustomerBranchDto> createCustomerBranch(@PathVariable Long customerId,@Valid @RequestBody CustomerBranchRequest customerBranchRequest) {
 
-        CustomerBranch customerBranch = customerBranchService.createCustomerBranch(customerBranchRequest);
+        CustomerBranch customerBranch = customerBranchService.createCustomerBranch(customerId,customerBranchRequest);
         return new Response<CustomerBranchDto>().buildSuccessResponse("Customer Branch Created Successfully",
                 CustomerBranchDto.of(customerBranch), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public Response<CustomerBranchDto> updateCustomerBranch(@PathVariable Long id,@PathVariable Long customerId,
+    @PutMapping("/{customerId}/branch/{branchId}")
+    public Response<CustomerBranchDto> updateCustomerBranch(@PathVariable Long customerId,@PathVariable Long branchId,
                                                 @Valid @RequestBody CustomerBranchRequest customerBranchRequest) {
 
-        CustomerBranch customerBranch = customerBranchService.updateCustomerBranch(id,customerBranchRequest);
+        CustomerBranch customerBranch = customerBranchService.updateCustomerBranch(customerId,branchId,customerBranchRequest);
         return new Response<CustomerBranchDto>().buildSuccessResponse("Customer Branch Updated Successfully",
                 CustomerBranchDto.of(customerBranch), HttpStatus.OK);
     }
@@ -47,10 +46,10 @@ public class CustomerBranchController {
                 CustomerBranchDto.of(customerBranch), HttpStatus.FOUND);
     }
 
-    @GetMapping("/active")
-    public Response<Page<CustomerBranchDto>> getActiveCustomerBranches(@PageableDefault Pageable pageable) {
+    @GetMapping("/{customerId}/active")
+    public Response<Page<CustomerBranchDto>> getActiveCustomerBranches(@PathVariable Long customerId,@PageableDefault Pageable pageable) {
 
-        Page<CustomerBranch> customerBranches = customerBranchService.getAllActiveCustomerBranches(pageable);
+        Page<CustomerBranch> customerBranches = customerBranchService.getAllActiveCustomerBranches(customerId,pageable);
         return new Response<Page<CustomerBranchDto>>().buildSuccessResponse("FOUND",
                 new PageImpl<>(CustomerBranchDto.of(customerBranches.getContent()), pageable, customerBranches.getTotalElements()), HttpStatus.FOUND);
     }

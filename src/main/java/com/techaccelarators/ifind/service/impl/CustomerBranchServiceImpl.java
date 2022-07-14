@@ -1,17 +1,26 @@
 package com.techaccelarators.ifind.service.impl;
 
+import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.domain.CustomerBranch;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.branch.CustomerBranchRequest;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
 import com.techaccelarators.ifind.repository.CustomerBranchRepository;
+import com.techaccelarators.ifind.repository.CustomerRepository;
+import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.service.CustomerBranchService;
+import com.techaccelarators.ifind.service.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -19,25 +28,40 @@ import org.springframework.stereotype.Service;
 public class CustomerBranchServiceImpl implements CustomerBranchService {
 
     private final CustomerBranchRepository customerBranchRepository;
+    private final CustomerRepository customerRepository;
     @Override
-    public CustomerBranch createCustomerBranch(CustomerBranchRequest customerBranchRequest) {
+    public CustomerBranch createCustomerBranch(Long customerId,CustomerBranchRequest customerBranchRequest) {
+
         checkUnique(customerBranchRequest, null);
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
         CustomerBranch customerBranch = CustomerBranch.builder()
                 .name(customerBranchRequest.getName())
                 .address(customerBranchRequest.getAddress())
                 .contactDetails(customerBranchRequest.getContactDetails())
                 .build();
         customerBranch.setStatus(Status.ACTIVE);
+        Set<CustomerBranch> customerBranches = customer.getCustomerBranches();
+        customerBranches.add(customerBranch);
+        customer.setCustomerBranches(customerBranches);
+        customerRepository.save(customer);
         return customerBranchRepository.save(customerBranch);
     }
 
     @Override
-    public CustomerBranch updateCustomerBranch(Long id, CustomerBranchRequest customerBranchRequest) {
-        CustomerBranch customerBranch = getCustomerBranchById(id);
-        checkUnique(customerBranchRequest, id);
+    public CustomerBranch updateCustomerBranch(Long customerId, Long branchId, CustomerBranchRequest customerBranchRequest) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
+        CustomerBranch customerBranch = getCustomerBranchById(branchId);
         customerBranch.setName(customerBranchRequest.getName());
         customerBranch.setAddress(customerBranchRequest.getAddress());
         customerBranch.setContactDetails(customerBranchRequest.getContactDetails());
+
+        Set<CustomerBranch> customerBranches = customer.getCustomerBranches();
+        customerBranches.add(customerBranch);
+        customer.setCustomerBranches(customerBranches);
+        customerRepository.save(customer);
+
         return customerBranchRepository.save(customerBranch);
     }
 
@@ -48,8 +72,13 @@ public class CustomerBranchServiceImpl implements CustomerBranchService {
     }
 
     @Override
-    public Page<CustomerBranch> getAllActiveCustomerBranches(Pageable pageable) {
-        return customerBranchRepository.findByStatus(Status.ACTIVE,pageable);
+    public Page<CustomerBranch> getAllActiveCustomerBranches(Long customerId,Pageable pageable) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
+        List<CustomerBranch> branchList = customer.getCustomerBranches().stream()
+                                            .filter(customerBranch -> customerBranch.getStatus().equals(Status.ACTIVE))
+                                            .collect(Collectors.toList());
+        return new PageImpl<>(branchList);
     }
 
     @Override

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -39,4 +40,6 @@ public class Customer extends BaseEntity {
     private ContactDetails contactDetails;
     @OneToOne
     private ServiceType serviceType;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<CustomerBranch> customerBranches;
 }

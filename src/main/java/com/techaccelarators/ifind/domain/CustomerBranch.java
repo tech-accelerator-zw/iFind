@@ -24,7 +24,5 @@ public class CustomerBranch extends BaseEntity{
     @Embedded
     @Column(name = "contact_details")
     private ContactDetails contactDetails;
-    @ManyToOne
-    private Customer customer;
 
 }

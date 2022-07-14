@@ -74,8 +74,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponseDto getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Customer Not found"));
-        List<CustomerBranch> customerBranches = customerBranchRepository.findAllByCustomer(customer);
-        Set<CustomerBranch> branches = new HashSet<>(customerBranches);
+        Set<CustomerBranch> branches = customer.getCustomerBranches();
         return CustomerResponseDto.of(customer,branches);
 
     }
@@ -113,14 +112,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerService.setStatus(Status.ACTIVE);
 
         customerServiceRepository.save(customerService);
-    }
-    public void addBranchToCustomer(Long customerId,Long branchId){
-        Customer customer = getById(customerId);
-        CustomerBranch customerBranch = customerBranchRepository.findById(branchId)
-                .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
-        customerBranch.setCustomer(customer);
-
-        customerBranchRepository.save(customerBranch);
     }
 
 

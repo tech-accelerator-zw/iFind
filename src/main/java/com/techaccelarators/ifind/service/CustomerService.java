@@ -22,7 +22,5 @@ public interface CustomerService {
 
     void assignCustomerToServiceType(Long customerId,Long serviceId);
 
-    void addBranchToCustomer(Long customerId,Long branchId);
-
     Customer getById(Long id);
 }

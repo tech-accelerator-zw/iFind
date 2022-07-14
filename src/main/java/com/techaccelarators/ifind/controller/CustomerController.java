@@ -3,6 +3,7 @@ package com.techaccelarators.ifind.controller;
 import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.dtos.customer.CustomerDto;
 import com.techaccelarators.ifind.dtos.customer.CustomerRequest;
+import com.techaccelarators.ifind.dtos.customer.CustomerResponseDto;
 import com.techaccelarators.ifind.service.CustomerService;
 import com.techaccelarators.ifind.util.Response;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,6 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/v1/customer")
 public class CustomerController {
     private final CustomerService customerService;
@@ -39,11 +39,11 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Response<CustomerDto> getCustomerById(@PathVariable Long id) {
+    public Response<CustomerResponseDto> getCustomerById(@PathVariable Long id) {
 
-        Customer customer = customerService.getById(id);
-        return new Response<CustomerDto>().buildSuccessResponse("FOUND",
-                CustomerDto.of(customer), HttpStatus.FOUND);
+        CustomerResponseDto customer = customerService.getCustomerById(id);
+        return new Response<CustomerResponseDto>().buildSuccessResponse("FOUND",
+                customer, HttpStatus.FOUND);
     }
 
     @GetMapping
@@ -74,13 +74,6 @@ public class CustomerController {
 
         customerService.assignCustomerToServiceType(customerId, serviceId);
         return new Response<>().buildSuccessResponse("Assigned Customer to ServiceType",HttpStatus.OK);
-    }
-
-    @PutMapping("/{customerId}/branch/{branchId}")
-    public Response<?> addBranchToCustomer(@PathVariable Long customerId,@PathVariable Long branchId){
-
-        customerService.addBranchToCustomer(customerId, branchId);
-        return new Response<>().buildSuccessResponse("Assigned a Branch to a Customer",HttpStatus.OK);
     }
 
 }

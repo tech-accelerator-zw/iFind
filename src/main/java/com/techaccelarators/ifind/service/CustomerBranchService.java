@@ -6,13 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CustomerBranchService {
-    CustomerBranch createCustomerBranch(CustomerBranchRequest customerBranchRequest);
+    CustomerBranch createCustomerBranch(Long customerId,CustomerBranchRequest customerBranchRequest);
 
-    CustomerBranch updateCustomerBranch(Long id, CustomerBranchRequest customerBranchRequest);
+    CustomerBranch updateCustomerBranch(Long customerId, Long branchId, CustomerBranchRequest customerBranchRequest);
 
     CustomerBranch getCustomerBranchById(Long id);
 
-    Page<CustomerBranch> getAllActiveCustomerBranches(Pageable pageable);
+    Page<CustomerBranch> getAllActiveCustomerBranches(Long customerId, Pageable pageable);
 
     CustomerBranch toggleCustomerBranchStatus(Long id);
 }
