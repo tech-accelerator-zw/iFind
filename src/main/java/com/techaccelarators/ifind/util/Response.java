@@ -2,6 +2,8 @@ package com.techaccelarators.ifind.util;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
+import org.springframework.util.MultiValueMap;
 
 import java.io.Serializable;
 
@@ -15,7 +17,6 @@ public class Response<T> implements Serializable {
 
     public Response() {
     }
-
     public Response<T> buildSuccessResponse(String message) {
         this.statusCode = HttpStatus.OK;
         this.success = true;
