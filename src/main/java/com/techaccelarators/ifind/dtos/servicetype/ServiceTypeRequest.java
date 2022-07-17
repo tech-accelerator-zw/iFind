@@ -13,4 +13,6 @@ public class ServiceTypeRequest {
 
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
+
+    private String icon;
 }

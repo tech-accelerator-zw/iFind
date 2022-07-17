@@ -61,6 +61,13 @@ public class CustomerController {
         return new Response<Page<CustomerDto>>().buildSuccessResponse("FOUND",
                 new PageImpl<>(CustomerDto.of(customers.getContent()), pageable, customers.getTotalElements()), HttpStatus.FOUND);
     }
+    @GetMapping("/search")
+    public Response<Page<CustomerDto>> searchCustomer(@RequestParam String searchParam, @PageableDefault Pageable pageable) {
+        Page<Customer> customers = customerService.searchCustomer(searchParam, pageable);
+        return new Response<Page<CustomerDto>>().buildSuccessResponse("SUCCESSFUL",
+                new PageImpl<>(CustomerDto.of(customers.getContent()),
+                        pageable, customers.getTotalElements()),HttpStatus.OK);
+    }
 
     @PutMapping("/{id}/status")
     public Response<CustomerDto> toggleCustomerStatus(@PathVariable Long id) {

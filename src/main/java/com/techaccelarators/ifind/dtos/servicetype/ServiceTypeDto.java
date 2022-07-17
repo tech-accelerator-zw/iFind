@@ -18,13 +18,14 @@ import java.util.stream.Collectors;
 public class ServiceTypeDto {
     private Long id;
     private String name;
+    private String icon;
     private Status status;
 
     public static ServiceTypeDto of(ServiceType serviceType){
         if(Objects.isNull(serviceType)){
             return null;
         }
-        return new ServiceTypeDto(serviceType.getId(), serviceType.getName(),serviceType.getStatus());
+        return new ServiceTypeDto(serviceType.getId(), serviceType.getName(), serviceType.getImageUrl(), serviceType.getStatus());
     }
 
     public static List<ServiceTypeDto> of(Collection<ServiceType> serviceTypes){

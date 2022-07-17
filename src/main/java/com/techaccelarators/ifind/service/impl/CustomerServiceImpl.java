@@ -31,7 +31,6 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ServiceTypeRepository serviceTypeRepository;
     private final CustomerServiceRepository customerServiceRepository;
-    private final CustomerBranchRepository customerBranchRepository;
 
 
     @Override
@@ -68,6 +67,16 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer getById(Long id){
         return customerRepository.findById(id)
                 .orElseThrow(()-> new RecordNotFoundException("Customer Not Found"));
+    }
+
+    @Override
+    public Page<Customer> searchCustomer(String searchParam, Pageable pageable) {
+        try {
+            String searchWord = "%".concat(searchParam).concat("%");
+            return customerRepository.findAllByServiceTypeLikeIgnoreCaseOrNameLikeIgnoreCase(searchWord, searchWord, pageable);
+        } catch (Exception ex) {
+            throw new InvalidRequestException(ex.getMessage());
+        }
     }
 
     @Override

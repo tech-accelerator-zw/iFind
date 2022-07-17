@@ -23,4 +23,6 @@ public interface CustomerService {
     void assignCustomerToServiceType(Long customerId,Long serviceId);
 
     Customer getById(Long id);
+
+    Page<Customer> searchCustomer(String searchParam, Pageable pageable);
 }
