@@ -1,14 +1,14 @@
 package com.techaccelarators.ifind.service.impl;
 
 import com.techaccelarators.ifind.domain.Role;
-import com.techaccelarators.ifind.domain.User;
+import com.techaccelarators.ifind.domain.UserAccount;
 import com.techaccelarators.ifind.domain.UserRole;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.security.LoginDto;
 import com.techaccelarators.ifind.dtos.security.SignUpDto;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.repository.RoleRepository;
-import com.techaccelarators.ifind.repository.UserRepository;
+import com.techaccelarators.ifind.repository.UserAccountRepository;
 import com.techaccelarators.ifind.repository.UserRoleRepository;
 import com.techaccelarators.ifind.security.JwtTokenProvider;
 import com.techaccelarators.ifind.service.AuthService;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRoleRepository userRoleRepository;
@@ -41,25 +41,25 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void registerUser(SignUpDto signUpDto) {
-        if(userRepository.existsByUsername(signUpDto.getUsername())){
+        if(userAccountRepository.existsByUsername(signUpDto.getUsername())){
             throw new InvalidRequestException("Username Already In Use");
         }
-        if(userRepository.existsByEmail(signUpDto.getEmail())){
+        if(userAccountRepository.existsByEmail(signUpDto.getEmail())){
             throw new InvalidRequestException("Email Already In Use");
         }
-        User user = new User();
-        user.setName(signUpDto.getName());
-        user.setUsername(signUpDto.getUsername());
-        user.setEmail(signUpDto.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
-        user.setStatus(Status.ACTIVE);
+        UserAccount userAccount = new UserAccount();
+        userAccount.setName(signUpDto.getName());
+        userAccount.setUsername(signUpDto.getUsername());
+        userAccount.setEmail(signUpDto.getEmail());
+        userAccount.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
+        userAccount.setStatus(Status.ACTIVE);
 
         Role roles = roleRepository.findByName("ROLE_USER").get();
         UserRole userRole = new UserRole();
-        userRole.setUser(user);
+        userRole.setUserAccount(userAccount);
         userRole.setRole(roles);
         userRoleRepository.save(userRole);
 
-        userRepository.save(user);
+        userAccountRepository.save(userAccount);
     }
 }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "user_roles")
 public class UserRole extends BaseEntity{
     @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
+    private UserAccount userAccount;
     @ManyToOne(cascade = CascadeType.ALL)
     private Role role;
 }
