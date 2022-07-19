@@ -23,7 +23,6 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerDto> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
         Customer customer = customerService.createCustomer(customerRequest);
         return new Response<CustomerDto>().buildSuccessResponse("Customer Created Successfully",
@@ -31,7 +30,6 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerDto> updateCustomer(@PathVariable Long id,
                                                 @Valid @RequestBody CustomerRequest customerRequest) {
 
@@ -41,7 +39,6 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerResponseDto> getCustomerById(@PathVariable Long id) {
 
         CustomerResponseDto customer = customerService.getCustomerById(id);
@@ -50,7 +47,6 @@ public class CustomerController {
     }
 
     @GetMapping
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<Page<CustomerDto>> getAllCustomers(@PageableDefault Pageable pageable) {
 
         Page<Customer> customers = customerService.getAllCustomers(pageable);
@@ -59,7 +55,6 @@ public class CustomerController {
     }
 
     @GetMapping("/active")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<Page<CustomerDto>> getActiveCustomers(@PageableDefault Pageable pageable) {
 
         Page<Customer> customers = customerService.getAllActiveCustomers(pageable);
@@ -67,7 +62,6 @@ public class CustomerController {
                 new PageImpl<>(CustomerDto.of(customers.getContent()), pageable, customers.getTotalElements()), HttpStatus.FOUND);
     }
     @GetMapping("/search")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<Page<CustomerDto>> searchCustomer(@RequestParam String searchParam, @PageableDefault Pageable pageable) {
         Page<Customer> customers = customerService.searchCustomer(searchParam, pageable);
         return new Response<Page<CustomerDto>>().buildSuccessResponse("SUCCESSFUL",
@@ -76,7 +70,6 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}/status")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerDto> toggleCustomerStatus(@PathVariable Long id) {
 
         Customer customer = customerService.toggleCustomerStatus(id);
@@ -84,7 +77,6 @@ public class CustomerController {
                 CustomerDto.of(customer), HttpStatus.OK);
     }
     @PutMapping("/{customerId}/service/{serviceId}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<?> assignCustomerToServiceType(@PathVariable Long customerId,@PathVariable Long serviceId){
 
         customerService.assignCustomerToServiceType(customerId, serviceId);
