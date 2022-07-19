@@ -23,6 +23,7 @@ public class ServiceTypeController {
     private final ServiceTypeService serviceTypeService;
 
     @PostMapping
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<ServiceTypeDto> createServiceType(@Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
 
         ServiceType serviceType = serviceTypeService.createServiceType(serviceTypeRequest);
@@ -31,6 +32,7 @@ public class ServiceTypeController {
     }
 
     @PutMapping("/{id}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<ServiceTypeDto> updateServiceType(@PathVariable Long id, @Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
 
         ServiceType serviceType = serviceTypeService.updateServiceType(id,serviceTypeRequest);
@@ -39,6 +41,7 @@ public class ServiceTypeController {
     }
 
     @GetMapping
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<Page<ServiceTypeDto>> getAllServiceTypes(@PageableDefault Pageable pageable) {
 
         Page<ServiceType> serviceTypes = serviceTypeService.getAllServiceTypes(pageable);
@@ -47,6 +50,7 @@ public class ServiceTypeController {
     }
 
     @GetMapping("/{id}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<ServiceTypeResponseDto> getServiceTypeById(@PathVariable Long id) {
 
         return new Response<ServiceTypeResponseDto>().buildSuccessResponse("FOUND",
@@ -54,6 +58,7 @@ public class ServiceTypeController {
     }
 
     @GetMapping("/name")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<ServiceTypeDto> getServiceTypeByName(@RequestParam String name) {
 
         ServiceType serviceType = serviceTypeService.getServiceTypeByName(name);
@@ -62,6 +67,7 @@ public class ServiceTypeController {
     }
 
     @PutMapping("/{id}/status")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<ServiceTypeDto> toggleServiceTypeStatus(@PathVariable Long id) {
 
         ServiceType serviceType = serviceTypeService.toggleServiceTypeStatus(id);

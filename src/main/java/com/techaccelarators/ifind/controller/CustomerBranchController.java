@@ -22,6 +22,7 @@ public class CustomerBranchController {
     private final CustomerBranchService customerBranchService;
 
     @PostMapping("{customerId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerBranchDto> createCustomerBranch(@PathVariable Long customerId,@Valid @RequestBody CustomerBranchRequest customerBranchRequest) {
 
         CustomerBranch customerBranch = customerBranchService.createCustomerBranch(customerId,customerBranchRequest);
@@ -30,6 +31,7 @@ public class CustomerBranchController {
     }
 
     @PutMapping("/{customerId}/branch/{branchId}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerBranchDto> updateCustomerBranch(@PathVariable Long customerId,@PathVariable Long branchId,
                                                 @Valid @RequestBody CustomerBranchRequest customerBranchRequest) {
 
@@ -39,6 +41,7 @@ public class CustomerBranchController {
     }
 
     @GetMapping("/{id}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerBranchDto> getCustomerBranchById(@PathVariable Long id) {
 
         CustomerBranch customerBranch = customerBranchService.getCustomerBranchById(id);
@@ -47,6 +50,7 @@ public class CustomerBranchController {
     }
 
     @GetMapping("/{customerId}/active")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<Page<CustomerBranchDto>> getActiveCustomerBranches(@PathVariable Long customerId,@PageableDefault Pageable pageable) {
 
         Page<CustomerBranch> customerBranches = customerBranchService.getAllActiveCustomerBranches(customerId,pageable);
@@ -55,6 +59,7 @@ public class CustomerBranchController {
     }
 
     @PutMapping("/{id}/status")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Response<CustomerBranchDto> toggleCustomerStatus(@PathVariable Long id) {
 
         CustomerBranch customerBranch = customerBranchService.toggleCustomerBranchStatus(id);
