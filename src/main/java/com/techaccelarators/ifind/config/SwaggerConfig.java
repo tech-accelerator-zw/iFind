@@ -16,7 +16,7 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        var openApi = new OpenAPI()
+        OpenAPI openApi = new OpenAPI()
                 .info(getInfo());
 
         addSecurity(openApi);
@@ -38,8 +38,8 @@ public class SwaggerConfig {
                 .url("https://www.yours.com/en/");
     }
     private void addSecurity(OpenAPI openApi) {
-        var components = createComponents();
-        var securityItem = new SecurityRequirement().addList(SCHEME_NAME);
+        Components components = createComponents();
+        SecurityRequirement securityItem = new SecurityRequirement().addList(SCHEME_NAME);
 
         openApi
                 .components(components)
@@ -47,7 +47,7 @@ public class SwaggerConfig {
     }
 
     private Components createComponents() {
-        var components = new Components();
+        Components components = new Components();
         components.addSecuritySchemes(SCHEME_NAME, createSecurityScheme());
 
         return components;
