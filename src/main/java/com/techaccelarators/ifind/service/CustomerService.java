@@ -25,4 +25,6 @@ public interface CustomerService {
     Customer getById(Long id);
 
     Page<Customer> searchCustomer(String searchParam, Pageable pageable);
+
+    void deleteCustomer(Long id);
 }

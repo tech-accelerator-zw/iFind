@@ -80,6 +80,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public void deleteCustomer(Long id) {
+        Customer customer = getById(id);
+        customerRepository.delete(customer);
+    }
+
+    @Override
     public CustomerResponseDto getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Customer Not found"));

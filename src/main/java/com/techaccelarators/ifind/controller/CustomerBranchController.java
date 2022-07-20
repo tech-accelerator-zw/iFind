@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -60,5 +61,13 @@ public class CustomerBranchController {
         CustomerBranch customerBranch = customerBranchService.toggleCustomerBranchStatus(id);
         return new Response<CustomerBranchDto>().buildSuccessResponse("Customer Branch Status Updated Successfully",
                 CustomerBranchDto.of(customerBranch), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response<?> deleteCustomerBranch(@PathVariable Long id) {
+
+        customerBranchService.deleteCustomerBranch(id);
+        return new Response<>().buildSuccessResponse("Customer Branch Deleted Successfully",HttpStatus.OK);
     }
 }

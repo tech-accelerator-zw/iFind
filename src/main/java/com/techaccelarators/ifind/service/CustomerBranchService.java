@@ -15,4 +15,6 @@ public interface CustomerBranchService {
     Page<CustomerBranch> getAllActiveCustomerBranches(Long customerId, Pageable pageable);
 
     CustomerBranch toggleCustomerBranchStatus(Long id);
+
+    void deleteCustomerBranch(Long id);
 }

@@ -21,4 +21,6 @@ public interface ServiceTypeService {
     ServiceType updateServiceType(Long id,ServiceTypeRequest serviceTypeRequest);
 
     Page<ServiceType> searchServiceType(String searchParam, Pageable pageable);
+
+    void deleteServiceType(Long id);
 }

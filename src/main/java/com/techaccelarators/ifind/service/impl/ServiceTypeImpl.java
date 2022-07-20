@@ -30,6 +30,7 @@ public class ServiceTypeImpl implements ServiceTypeService {
     public ServiceType createServiceType(ServiceTypeRequest serviceTypeRequest) {
         ServiceType serviceType = ServiceType.builder()
                 .name(serviceTypeRequest.getName())
+                .imageUrl(serviceTypeRequest.getIcon())
                 .build();
         serviceType.setStatus(Status.ACTIVE);
         return serviceTypeRepository.save(serviceType);
@@ -77,6 +78,7 @@ public class ServiceTypeImpl implements ServiceTypeService {
     public ServiceType updateServiceType(Long id,ServiceTypeRequest serviceTypeRequest) {
         ServiceType serviceType = getServiceById(id);
         serviceType.setName(serviceTypeRequest.getName());
+        serviceType.setImageUrl(serviceTypeRequest.getIcon());
         return serviceTypeRepository.save(serviceType);
     }
 
@@ -88,5 +90,11 @@ public class ServiceTypeImpl implements ServiceTypeService {
         } catch (Exception ex) {
             throw new InvalidRequestException(ex.getMessage());
         }
+    }
+
+    @Override
+    public void deleteServiceType(Long id) {
+        ServiceType serviceType = getServiceById(id);
+        serviceTypeRepository.delete(serviceType);
     }
 }

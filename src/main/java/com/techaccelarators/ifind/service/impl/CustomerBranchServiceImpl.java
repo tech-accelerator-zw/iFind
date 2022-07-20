@@ -8,9 +8,7 @@ import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
 import com.techaccelarators.ifind.repository.CustomerBranchRepository;
 import com.techaccelarators.ifind.repository.CustomerRepository;
-import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.service.CustomerBranchService;
-import com.techaccelarators.ifind.service.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -92,6 +90,13 @@ public class CustomerBranchServiceImpl implements CustomerBranchService {
         }
         return customerBranchRepository.save(customerBranch);
     }
+
+    @Override
+    public void deleteCustomerBranch(Long id) {
+        CustomerBranch customerBranch = getCustomerBranchById(id);
+        customerBranchRepository.delete(customerBranch);
+    }
+
     private void checkUnique(CustomerBranchRequest request, Long id) {
         log.info("Checking customer uniqueness with name: {} and id: {}", request.getName(), id);
         customerBranchRepository.findByNameIgnoreCase(request.getName())

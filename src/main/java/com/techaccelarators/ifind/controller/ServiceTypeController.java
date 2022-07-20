@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -78,5 +79,13 @@ public class ServiceTypeController {
         ServiceType serviceType = serviceTypeService.toggleServiceTypeStatus(id);
         return new Response<ServiceTypeDto>().buildSuccessResponse("ServiceType Status Updated Successfully",
                 ServiceTypeDto.of(serviceType), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response<?> deleteCustomer(@PathVariable Long id) {
+
+        serviceTypeService.deleteServiceType(id);
+        return new Response<>().buildSuccessResponse("ServiceType Deleted Successfully",HttpStatus.OK);
     }
 }
