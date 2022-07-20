@@ -6,6 +6,7 @@ import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;
+import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
 import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.repository.ServiceTypeRepository;
@@ -77,5 +78,15 @@ public class ServiceTypeImpl implements ServiceTypeService {
         ServiceType serviceType = getServiceById(id);
         serviceType.setName(serviceTypeRequest.getName());
         return serviceTypeRepository.save(serviceType);
+    }
+
+    @Override
+    public Page<ServiceType> searchServiceType(String searchParam, Pageable pageable) {
+        try {
+            String searchWord = "%".concat(searchParam).concat("%");
+            return serviceTypeRepository.findAllByNameLikeIgnoreCase(searchWord, pageable);
+        } catch (Exception ex) {
+            throw new InvalidRequestException(ex.getMessage());
+        }
     }
 }

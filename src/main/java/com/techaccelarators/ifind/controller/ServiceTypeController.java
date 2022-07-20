@@ -1,6 +1,8 @@
 package com.techaccelarators.ifind.controller;
 
+import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.domain.ServiceType;
+import com.techaccelarators.ifind.dtos.customer.CustomerDto;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeDto;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;
@@ -59,6 +61,15 @@ public class ServiceTypeController {
         ServiceType serviceType = serviceTypeService.getServiceTypeByName(name);
         return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",
                 ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
+    }
+
+    @GetMapping("/search")
+    public Response<Page<ServiceTypeDto>> searchCustomer(@RequestParam String searchParam, @PageableDefault Pageable pageable) {
+
+        Page<ServiceType> serviceTypes = serviceTypeService.searchServiceType(searchParam, pageable);
+        return new Response<Page<ServiceTypeDto>>().buildSuccessResponse("SUCCESSFUL",
+                new PageImpl<>(ServiceTypeDto.of(serviceTypes.getContent()),
+                        pageable, serviceTypes.getTotalElements()),HttpStatus.OK);
     }
 
     @PutMapping("/{id}/status")

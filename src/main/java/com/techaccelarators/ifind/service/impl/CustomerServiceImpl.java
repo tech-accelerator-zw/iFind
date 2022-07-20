@@ -73,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Page<Customer> searchCustomer(String searchParam, Pageable pageable) {
         try {
             String searchWord = "%".concat(searchParam).concat("%");
-            return customerRepository.findAllByServiceTypeLikeIgnoreCaseOrNameLikeIgnoreCase(searchWord, searchWord, pageable);
+            return customerRepository.findAllByNameLikeIgnoreCase(searchWord, pageable);
         } catch (Exception ex) {
             throw new InvalidRequestException(ex.getMessage());
         }

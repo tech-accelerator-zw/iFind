@@ -13,5 +13,5 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     Optional<Customer> findByNameIgnoreCase(String name);
 
     Page<Customer> findByStatus(Status status, Pageable pageable);
-    Page<Customer> findAllByServiceTypeLikeIgnoreCaseOrNameLikeIgnoreCase(String serviceType,String name,Pageable pageable);
+    Page<Customer> findAllByNameLikeIgnoreCase(String name,Pageable pageable);
 }

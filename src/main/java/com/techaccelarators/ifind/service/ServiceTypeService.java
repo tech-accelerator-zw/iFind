@@ -19,4 +19,6 @@ public interface ServiceTypeService {
     ServiceType toggleServiceTypeStatus(Long id);
 
     ServiceType updateServiceType(Long id,ServiceTypeRequest serviceTypeRequest);
+
+    Page<ServiceType> searchServiceType(String searchParam, Pageable pageable);
 }
