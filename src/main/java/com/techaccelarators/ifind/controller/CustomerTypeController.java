@@ -32,7 +32,6 @@ public class CustomerTypeController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin(origins = "*")
     public Response<CustomerTypeDto> updateCustomerType(@PathVariable Long id, @Valid @RequestBody CustomerTypeRequest customerTypeRequest) {
 
         CustomerType customerType = customerTypeService.updateCustomerType(id,customerTypeRequest);
@@ -73,7 +72,6 @@ public class CustomerTypeController {
     }
 
     @PutMapping("/{id}/status")
-    @CrossOrigin(origins = "*")
     public Response<CustomerTypeDto> toggleCustomerTypeStatus(@PathVariable Long id) {
 
         CustomerType customerType = customerTypeService.toggleCustomerTypeStatus(id);

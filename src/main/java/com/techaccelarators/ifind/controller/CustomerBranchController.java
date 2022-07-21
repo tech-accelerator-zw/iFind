@@ -31,7 +31,6 @@ public class CustomerBranchController {
     }
 
     @PutMapping("/{customerId}/branch/{branchId}")
-    @CrossOrigin(origins = "*")
     public Response<CustomerBranchDto> updateCustomerBranch(@PathVariable Long customerId,@PathVariable Long branchId,
                                                 @Valid @RequestBody CustomerBranchRequest customerBranchRequest) {
 
@@ -57,7 +56,6 @@ public class CustomerBranchController {
     }
 
     @PutMapping("/{id}/status")
-    @CrossOrigin(origins = "*")
     public Response<CustomerBranchDto> toggleCustomerStatus(@PathVariable Long id) {
 
         CustomerBranch customerBranch = customerBranchService.toggleCustomerBranchStatus(id);

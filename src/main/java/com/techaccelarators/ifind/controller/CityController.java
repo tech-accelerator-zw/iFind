@@ -32,7 +32,6 @@ public class CityController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin(origins = "*")
     public Response<CityDto> updateCity(@PathVariable Long id, @Valid @RequestBody CityRequestDto cityRequestDto) {
 
         City city = cityService.updateCity(id,cityRequestDto);
@@ -73,7 +72,6 @@ public class CityController {
     }
 
     @PutMapping("/{id}/status")
-    @CrossOrigin(origins = "*")
     public Response<CityDto> toggleCityStatus(@PathVariable Long id) {
 
         City city = cityService.toggleCityStatus(id);

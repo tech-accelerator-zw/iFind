@@ -32,7 +32,6 @@ public class ServiceTypeController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin(origins = "*")
     public Response<ServiceTypeDto> updateServiceType(@PathVariable Long id, @Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
 
         ServiceType serviceType = serviceTypeService.updateServiceType(id,serviceTypeRequest);
@@ -73,7 +72,6 @@ public class ServiceTypeController {
     }
 
     @PutMapping("/{id}/status")
-    @CrossOrigin(origins = "*")
     public Response<ServiceTypeDto> toggleServiceTypeStatus(@PathVariable Long id) {
 
         ServiceType serviceType = serviceTypeService.toggleServiceTypeStatus(id);

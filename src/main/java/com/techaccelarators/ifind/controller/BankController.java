@@ -32,7 +32,6 @@ public class BankController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin(origins = "*")
     public Response<BankDto> updateBank(@PathVariable Long id, @Valid @RequestBody BankRequestDto bankRequestDto) {
 
         Bank bank = bankService.updateBank(id,bankRequestDto);
@@ -73,7 +72,6 @@ public class BankController {
     }
 
     @PutMapping("/{id}/status")
-    @CrossOrigin(origins = "*")
     public Response<BankDto> toggleBankStatus(@PathVariable Long id) {
 
         Bank bank = bankService.toggleBankStatus(id);
