@@ -1,8 +1,6 @@
 package com.techaccelarators.ifind.controller;
 
-import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.domain.ServiceType;
-import com.techaccelarators.ifind.dtos.customer.CustomerDto;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeDto;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;

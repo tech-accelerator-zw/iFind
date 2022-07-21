@@ -8,7 +8,6 @@ import com.techaccelarators.ifind.dtos.customer.CustomerRequest;
 import com.techaccelarators.ifind.dtos.customer.CustomerResponseDto;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
-import com.techaccelarators.ifind.repository.CustomerBranchRepository;
 import com.techaccelarators.ifind.repository.CustomerRepository;
 import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.repository.ServiceTypeRepository;
@@ -19,10 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,6 +32,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer createCustomer(CustomerRequest customerRequest) {
         checkUnique(customerRequest, null);
+        if(customerRepository.existsByBankingDetails_AccountNumber(customerRequest.getBankingDetails().getAccountNumber())){
+            throw new InvalidRequestException("Account Number Already In Use");
+        }
         Customer customer = Customer.builder()
                 .name(customerRequest.getName())
                 .address(customerRequest.getAddress())
@@ -60,6 +59,10 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setImageUrl(customerRequest.getImageUrl());
         customer.setBankingDetails(customerRequest.getBankingDetails());
         customer.setContactDetails(customerRequest.getContactDetails());
+
+        if(customerRepository.existsByBankingDetails_AccountNumber(customerRequest.getBankingDetails().getAccountNumber())){
+            throw new InvalidRequestException("Account Number Already In Use");
+        }
 
         return customerRepository.save(customer);
 

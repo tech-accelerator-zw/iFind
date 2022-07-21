@@ -14,4 +14,6 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
     Page<Customer> findByStatus(Status status, Pageable pageable);
     Page<Customer> findAllByNameLikeIgnoreCase(String name,Pageable pageable);
+
+    Boolean existsByBankingDetails_AccountNumber(String accountNumber);
 }
