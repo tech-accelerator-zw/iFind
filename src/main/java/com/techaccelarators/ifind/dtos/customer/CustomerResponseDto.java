@@ -1,12 +1,8 @@
 package com.techaccelarators.ifind.dtos.customer;
 
-import com.techaccelarators.ifind.domain.Customer;
-import com.techaccelarators.ifind.domain.CustomerBranch;
-import com.techaccelarators.ifind.domain.CustomerType;
-import com.techaccelarators.ifind.domain.ServiceType;
+import com.techaccelarators.ifind.domain.*;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.domain.util.Address;
-import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
 import com.techaccelarators.ifind.dtos.branch.CustomerBranchDto;
 import lombok.AllArgsConstructor;
@@ -33,7 +29,9 @@ public class CustomerResponseDto {
 
     private String imageUrl;
 
-    private BankingDetails bankingDetails;
+    private Bank bank;
+
+    private Long accountNumber;
 
     private ContactDetails contactDetails;
 
@@ -48,7 +46,8 @@ public class CustomerResponseDto {
             return null;
         }
         return new CustomerResponseDto(customer.getId(), customer.getName(),
-                customer.getDescription(),customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(), customer.getBankingDetails(),
+                customer.getDescription(),customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(),
+                customer.getBank(), customer.getAccountNumber(),
                 customer.getContactDetails(), customer.getStatus(), customer.getServiceType(),customerBranches
                 .stream().map(CustomerBranchDto::of).collect(Collectors.toSet()));
     }

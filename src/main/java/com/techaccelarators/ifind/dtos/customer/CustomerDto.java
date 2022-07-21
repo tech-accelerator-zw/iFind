@@ -1,11 +1,11 @@
 package com.techaccelarators.ifind.dtos.customer;
 
+import com.techaccelarators.ifind.domain.Bank;
 import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.domain.CustomerType;
 import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.domain.util.Address;
-import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +31,9 @@ public class CustomerDto {
 
     private String imageUrl;
 
-    private BankingDetails bankingDetails;
+    private Bank bank;
+
+    private Long accountNumber;
 
     private ContactDetails contactDetails;
 
@@ -44,7 +46,8 @@ public class CustomerDto {
             return null;
         }
         return new CustomerDto(customer.getId(), customer.getName(),
-                customer.getDescription(), customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(), customer.getBankingDetails(),
+                customer.getDescription(), customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(),
+                customer.getBank(), customer.getAccountNumber(),
                 customer.getContactDetails(), customer.getStatus(), customer.getServiceType());
     }
 

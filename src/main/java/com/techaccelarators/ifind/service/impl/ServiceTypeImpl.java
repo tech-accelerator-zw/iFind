@@ -54,6 +54,13 @@ public class ServiceTypeImpl implements ServiceTypeService {
                 .collect(Collectors.toSet());
         return ServiceTypeResponseDto.of(serviceType,customers);
     }
+
+    @Override
+    public ServiceType getById(Long id) {
+        return serviceTypeRepository.findById(id)
+                .orElseThrow(()-> new RecordNotFoundException("ServiceType Not Found"));
+    }
+
     public ServiceType getServiceById(Long id){
         return serviceTypeRepository.findById(id)
                 .orElseThrow(()-> new RecordNotFoundException("ServiceType Not Found"));

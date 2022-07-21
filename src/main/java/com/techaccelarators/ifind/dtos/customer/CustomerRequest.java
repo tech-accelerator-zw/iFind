@@ -1,7 +1,6 @@
 package com.techaccelarators.ifind.dtos.customer;
 
 import com.techaccelarators.ifind.domain.util.Address;
-import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,9 +26,9 @@ public class CustomerRequest {
     private Long customerTypeId;
 
     private String imageUrl;
-
+    @NotNull(message = "Bank id is required")
     private Long bankId;
-
+    @NotNull(message = "Bank account number is required")
     private Long accountNumber;
 
     @NotNull(message = "Contact Details are required")

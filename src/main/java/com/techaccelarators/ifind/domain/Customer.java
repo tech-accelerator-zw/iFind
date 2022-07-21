@@ -1,7 +1,6 @@
 package com.techaccelarators.ifind.domain;
 
 import com.techaccelarators.ifind.domain.util.Address;
-import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +31,10 @@ public class Customer extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Embedded
-    private BankingDetails bankingDetails;
+    @ManyToOne
+    private Bank bank;
+    @Column(name = "account_number", unique = true, nullable = false)
+    private Long accountNumber;
 
     @Embedded
     private ContactDetails contactDetails;
