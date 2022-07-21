@@ -88,7 +88,7 @@ public class BankServiceImpl implements BankService {
     private void checkUnique(BankRequestDto request, Long id) {
         log.info("Checking bank uniqueness with name: {} and id: {}", request.getName(), id);
         bankRepository.findByNameIgnoreCase(request.getName())
-                .filter(customer -> !customer.getId().equals(id))
+                .filter(bank -> !bank.getId().equals(id))
                 .ifPresent(customer -> {
                     throw new InvalidRequestException("Bank with given name already exists");
                 });
