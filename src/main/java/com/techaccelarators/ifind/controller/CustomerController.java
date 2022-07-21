@@ -31,6 +31,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
+    @CrossOrigin(origins = "*")
     public Response<CustomerDto> updateCustomer(@PathVariable Long id,
                                                 @Valid @RequestBody CustomerRequest customerRequest) {
 
@@ -71,6 +72,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}/status")
+    @CrossOrigin(origins = "*")
     public Response<CustomerDto> toggleCustomerStatus(@PathVariable Long id) {
 
         Customer customer = customerService.toggleCustomerStatus(id);
@@ -78,6 +80,7 @@ public class CustomerController {
                 CustomerDto.of(customer), HttpStatus.OK);
     }
     @PutMapping("/{customerId}/service/{serviceId}")
+    @CrossOrigin(origins = "*")
     public Response<?> assignCustomerToServiceType(@PathVariable Long customerId,@PathVariable Long serviceId){
 
         customerService.assignCustomerToServiceType(customerId, serviceId);
