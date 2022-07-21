@@ -12,6 +12,7 @@ import com.techaccelarators.ifind.repository.CustomerRepository;
 import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.repository.ServiceTypeRepository;
 import com.techaccelarators.ifind.service.CustomerService;
+import com.techaccelarators.ifind.service.ServiceTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,8 @@ import java.util.Set;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ServiceTypeRepository serviceTypeRepository;
+
+    private final ServiceTypeService serviceTypeService;
     private final CustomerServiceRepository customerServiceRepository;
 
 
@@ -43,7 +46,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .imageUrl(customerRequest.getImageUrl())
                 .bankingDetails(customerRequest.getBankingDetails())
                 .contactDetails(customerRequest.getContactDetails())
-                .serviceType(customerRequest.getServiceType())
+                .serviceType(serviceTypeRepository.findById(customerRequest.getServiceTypeId())
+                        .orElseThrow(()-> new RecordNotFoundException("ServiceType Not Found")))
                 .build();
         customer.setStatus(Status.ACTIVE);
         return customerRepository.save(customer);

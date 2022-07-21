@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ServiceTypeRepository extends JpaRepository<ServiceType,Long> {
     Optional<ServiceType> findServiceTypeByNameIgnoreCase(String name);
-
     Page<ServiceType> findAllByNameLikeIgnoreCase(String searchWord, Pageable pageable);
+
+    Boolean existsByNameIgnoreCase(String name);
 }

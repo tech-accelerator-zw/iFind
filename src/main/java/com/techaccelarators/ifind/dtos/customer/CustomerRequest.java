@@ -5,6 +5,7 @@ import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
 import com.techaccelarators.ifind.domain.util.CustomerType;
+import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,6 @@ public class CustomerRequest {
     @NotNull(message = "Contact Details are required")
     private ContactDetails contactDetails;
 
-    @NotNull(message = "Service Type is required")
-    private ServiceType serviceType;
+    @NotNull(message = "Service Type Id is required")
+    private Long serviceTypeId;
 }

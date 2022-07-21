@@ -28,6 +28,9 @@ public class ServiceTypeImpl implements ServiceTypeService {
 
     @Override
     public ServiceType createServiceType(ServiceTypeRequest serviceTypeRequest) {
+        if(serviceTypeRepository.existsByNameIgnoreCase(serviceTypeRequest.getName())){
+            throw new InvalidRequestException("Service Type Already In Exist");
+        }
         ServiceType serviceType = ServiceType.builder()
                 .name(serviceTypeRequest.getName())
                 .imageUrl(serviceTypeRequest.getIcon())
