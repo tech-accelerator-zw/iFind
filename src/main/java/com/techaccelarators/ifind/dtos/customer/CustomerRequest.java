@@ -1,11 +1,8 @@
 package com.techaccelarators.ifind.dtos.customer;
 
-import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
-import com.techaccelarators.ifind.domain.util.CustomerType;
-import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,12 +24,13 @@ public class CustomerRequest {
     @Valid
     private Address address;
 
-    private CustomerType customerType;
+    private Long customerTypeId;
 
     private String imageUrl;
 
-    @NotNull(message = "Banking details are required")
-    private BankingDetails bankingDetails;
+    private Long bankId;
+
+    private Long accountNumber;
 
     @NotNull(message = "Contact Details are required")
     private ContactDetails contactDetails;

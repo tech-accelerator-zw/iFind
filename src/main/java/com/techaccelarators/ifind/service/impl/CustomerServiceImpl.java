@@ -1,9 +1,8 @@
 package com.techaccelarators.ifind.service.impl;
 
-import com.techaccelarators.ifind.domain.Customer;
-import com.techaccelarators.ifind.domain.CustomerBranch;
-import com.techaccelarators.ifind.domain.ServiceType;
+import com.techaccelarators.ifind.domain.*;
 import com.techaccelarators.ifind.domain.enums.Status;
+import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.dtos.customer.CustomerRequest;
 import com.techaccelarators.ifind.dtos.customer.CustomerResponseDto;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
@@ -11,8 +10,9 @@ import com.techaccelarators.ifind.exception.RecordNotFoundException;
 import com.techaccelarators.ifind.repository.CustomerRepository;
 import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.repository.ServiceTypeRepository;
+import com.techaccelarators.ifind.service.BankService;
 import com.techaccelarators.ifind.service.CustomerService;
-import com.techaccelarators.ifind.service.ServiceTypeService;
+import com.techaccelarators.ifind.service.CustomerTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,24 +27,29 @@ import java.util.Set;
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ServiceTypeRepository serviceTypeRepository;
-
-    private final ServiceTypeService serviceTypeService;
+    private final BankService bankService;
+    private final CustomerTypeService customerTypeService;
     private final CustomerServiceRepository customerServiceRepository;
 
 
     @Override
     public Customer createCustomer(CustomerRequest customerRequest) {
         checkUnique(customerRequest, null);
-        if(customerRepository.existsByBankingDetails_AccountNumber(customerRequest.getBankingDetails().getAccountNumber())){
+        Bank bank = bankService.getBankById(customerRequest.getBankId());
+        if(customerRepository.existsByBankingDetails_AccountNumberAndBankingDetails_BankName(customerRequest.getAccountNumber(), bank.getName())){
             throw new InvalidRequestException("Account Number Already In Use");
         }
+        BankingDetails bankingDetails = new BankingDetails();
+        bankingDetails.setBankName(bank.getName());
+        bankingDetails.setAccountNumber(customerRequest.getAccountNumber());
+        CustomerType customerType = customerTypeService.getCustomerTypeById(customerRequest.getServiceTypeId());
         Customer customer = Customer.builder()
                 .name(customerRequest.getName())
                 .description(customerRequest.getDescription())
                 .address(customerRequest.getAddress())
-                .customerType(customerRequest.getCustomerType())
+                .customerType(customerType)
                 .imageUrl(customerRequest.getImageUrl())
-                .bankingDetails(customerRequest.getBankingDetails())
+                .bankingDetails(bankingDetails)
                 .contactDetails(customerRequest.getContactDetails())
                 .serviceType(serviceTypeRepository.findById(customerRequest.getServiceTypeId())
                         .orElseThrow(()-> new RecordNotFoundException("ServiceType Not Found")))
@@ -58,15 +63,22 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(Long id, CustomerRequest customerRequest) {
 
         Customer customer = getById(id);
+        CustomerType customerType = customerTypeService.getCustomerTypeById(customerRequest.getServiceTypeId());
+        Bank bank = bankService.getBankById(customerRequest.getBankId());
+
         checkUnique(customerRequest, id);
+        BankingDetails bankingDetails = new BankingDetails();
+        bankingDetails.setBankName(bank.getName());
+        bankingDetails.setAccountNumber(customerRequest.getAccountNumber());
+
         customer.setName(customerRequest.getName());
         customer.setAddress(customerRequest.getAddress());
-        customer.setCustomerType(customerRequest.getCustomerType());
+        customer.setCustomerType(customerType);
         customer.setImageUrl(customerRequest.getImageUrl());
-        customer.setBankingDetails(customerRequest.getBankingDetails());
+        customer.setBankingDetails(bankingDetails);
         customer.setContactDetails(customerRequest.getContactDetails());
 
-        if(customerRepository.existsByBankingDetails_AccountNumber(customerRequest.getBankingDetails().getAccountNumber())){
+        if(customerRepository.existsByBankingDetails_AccountNumberAndBankingDetails_BankName(customerRequest.getAccountNumber(), bank.getName())){
             throw new InvalidRequestException("Account Number Already In Use");
         }
 

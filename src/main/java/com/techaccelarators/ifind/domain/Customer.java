@@ -3,7 +3,6 @@ package com.techaccelarators.ifind.domain;
 import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
-import com.techaccelarators.ifind.domain.util.CustomerType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

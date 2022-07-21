@@ -17,5 +17,5 @@ public class BankingDetails {
     private String bankName;
 
     @Column(name = "account_number", unique = true, nullable = false)
-    private String accountNumber;
+    private Long accountNumber;
 }

@@ -1,12 +1,12 @@
 package com.techaccelarators.ifind.dtos.customer;
 
 import com.techaccelarators.ifind.domain.Customer;
+import com.techaccelarators.ifind.domain.CustomerType;
 import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
-import com.techaccelarators.ifind.domain.util.CustomerType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
