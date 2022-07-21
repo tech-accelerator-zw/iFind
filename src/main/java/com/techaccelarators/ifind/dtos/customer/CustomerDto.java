@@ -1,6 +1,7 @@
 package com.techaccelarators.ifind.dtos.customer;
 
 import com.techaccelarators.ifind.domain.Customer;
+import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
@@ -22,6 +23,8 @@ public class CustomerDto {
 
     private String name;
 
+    private String description;
+
     private Address address;
 
     private CustomerType customerType;
@@ -34,13 +37,15 @@ public class CustomerDto {
 
     private Status status;
 
+    private ServiceType serviceType;
+
     public static CustomerDto of(Customer customer) {
         if (Objects.isNull(customer)) {
             return null;
         }
         return new CustomerDto(customer.getId(), customer.getName(),
-                customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(), customer.getBankingDetails(),
-                customer.getContactDetails(), customer.getStatus());
+                customer.getDescription(), customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(), customer.getBankingDetails(),
+                customer.getContactDetails(), customer.getStatus(), customer.getServiceType());
     }
 
     public static List<CustomerDto> of(List<Customer> customers) {

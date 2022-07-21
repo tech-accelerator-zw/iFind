@@ -1,5 +1,6 @@
 package com.techaccelarators.ifind.dtos.customer;
 
+import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
 import com.techaccelarators.ifind.domain.util.ContactDetails;
@@ -20,6 +21,8 @@ public class CustomerRequest {
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
+    private String description;
+
     @Valid
     private Address address;
 
@@ -32,4 +35,7 @@ public class CustomerRequest {
 
     @NotNull(message = "Contact Details are required")
     private ContactDetails contactDetails;
+
+    @NotNull(message = "Service Type is required")
+    private ServiceType serviceType;
 }

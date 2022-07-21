@@ -19,11 +19,11 @@ import java.util.Set;
 @Builder
 @Table(name = "customer")
 public class Customer extends BaseEntity {
-    @Column(name = "name",
-            unique = true,
-            nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @Column(name = "description")
+    private String description;
     @Embedded
     private Address address;
 
@@ -38,7 +38,7 @@ public class Customer extends BaseEntity {
 
     @Embedded
     private ContactDetails contactDetails;
-    @OneToOne
+    @ManyToOne
     private ServiceType serviceType;
     @OneToMany(cascade = CascadeType.ALL)
     private Set<CustomerBranch> customerBranches;

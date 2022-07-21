@@ -37,11 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
         }
         Customer customer = Customer.builder()
                 .name(customerRequest.getName())
+                .description(customerRequest.getDescription())
                 .address(customerRequest.getAddress())
                 .customerType(customerRequest.getCustomerType())
                 .imageUrl(customerRequest.getImageUrl())
                 .bankingDetails(customerRequest.getBankingDetails())
                 .contactDetails(customerRequest.getContactDetails())
+                .serviceType(customerRequest.getServiceType())
                 .build();
         customer.setStatus(Status.ACTIVE);
         return customerRepository.save(customer);

@@ -2,6 +2,7 @@ package com.techaccelarators.ifind.dtos.customer;
 
 import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.domain.CustomerBranch;
+import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.domain.util.Address;
 import com.techaccelarators.ifind.domain.util.BankingDetails;
@@ -24,6 +25,8 @@ public class CustomerResponseDto {
 
     private String name;
 
+    private String description;
+
     private Address address;
 
     private CustomerType customerType;
@@ -36,6 +39,8 @@ public class CustomerResponseDto {
 
     private Status status;
 
+    private ServiceType serviceType;
+
     private Set<CustomerBranchDto> customerBranchSet;
 
     public static CustomerResponseDto of(Customer customer, Set<CustomerBranch> customerBranches) {
@@ -43,8 +48,8 @@ public class CustomerResponseDto {
             return null;
         }
         return new CustomerResponseDto(customer.getId(), customer.getName(),
-                customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(), customer.getBankingDetails(),
-                customer.getContactDetails(), customer.getStatus(),customerBranches
+                customer.getDescription(),customer.getAddress(), customer.getCustomerType(), customer.getImageUrl(), customer.getBankingDetails(),
+                customer.getContactDetails(), customer.getStatus(), customer.getServiceType(),customerBranches
                 .stream().map(CustomerBranchDto::of).collect(Collectors.toSet()));
     }
 
