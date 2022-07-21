@@ -26,7 +26,7 @@ public class Customer extends BaseEntity {
     @Embedded
     private Address address;
 
-    @Enumerated(EnumType.STRING)
+    @OneToOne
     private CustomerType customerType;
 
     @Column(name = "image_url")
