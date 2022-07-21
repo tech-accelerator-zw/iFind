@@ -31,7 +31,7 @@ public class CustomerResponseDto {
 
     private Bank bank;
 
-    private Long accountNumber;
+    private String accountNumber;
 
     private ContactDetails contactDetails;
 

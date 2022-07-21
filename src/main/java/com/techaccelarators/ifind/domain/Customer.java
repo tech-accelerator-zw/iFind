@@ -34,7 +34,7 @@ public class Customer extends BaseEntity {
     @ManyToOne
     private Bank bank;
     @Column(name = "account_number", unique = true, nullable = false)
-    private Long accountNumber;
+    private String accountNumber;
 
     @Embedded
     private ContactDetails contactDetails;

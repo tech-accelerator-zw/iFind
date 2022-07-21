@@ -29,7 +29,7 @@ public class CustomerRequest {
     @NotNull(message = "Bank id is required")
     private Long bankId;
     @NotNull(message = "Bank account number is required")
-    private Long accountNumber;
+    private String accountNumber;
 
     @NotNull(message = "Contact Details are required")
     private ContactDetails contactDetails;
