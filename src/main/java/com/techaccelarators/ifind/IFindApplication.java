@@ -32,7 +32,7 @@ public class IFindApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedMethods("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
                         .allowedOrigins("*")
                         .allowedHeaders("*")
                         .allowCredentials(false)
