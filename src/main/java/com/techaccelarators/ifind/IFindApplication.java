@@ -25,21 +25,21 @@ public class IFindApplication {
         SpringApplication.run(IFindApplication.class, args);
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer()
-    {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
-                        .allowedOrigins("*")
-                        .allowedHeaders("*")
-                        .allowCredentials(false)
-                        .maxAge(-1);
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer()
+//    {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**")
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
+//                        .allowedOrigins("*")
+//                        .allowedHeaders("*")
+//                        .allowCredentials(false)
+//                        .maxAge(-1);
+//            }
+//        };
+//    }
 
 
 
