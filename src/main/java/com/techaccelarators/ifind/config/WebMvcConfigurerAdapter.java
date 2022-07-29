@@ -17,5 +17,17 @@ import java.util.Collections;
 @Configuration
 public class WebMvcConfigurerAdapter implements WebMvcConfigurer {
 
-
+    @Bean
+        public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            CorsConfiguration corsConfiguration=new CorsConfiguration();
+            corsConfiguration.setAllowCredentials(true);
+            corsConfiguration.addAllowedOrigin("*");
+            corsConfiguration.addAllowedMethod("*");
+            corsConfiguration.addAllowedHeader("*");
+            source.registerCorsConfiguration("/**",corsConfiguration);
+            FilterRegistrationBean<CorsFilter> bean =new FilterRegistrationBean<>(new CorsFilter(source));
+            bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
+       }
 }

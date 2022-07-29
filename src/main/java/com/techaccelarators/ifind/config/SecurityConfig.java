@@ -55,7 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers("/v1/auth/**").permitAll()
-                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .antMatchers("/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html").permitAll()
                 .anyRequest()
                 .authenticated();
         http.csrf().disable();
@@ -91,20 +93,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-//    @Bean
-//    public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration corsConfiguration=new CorsConfiguration();
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-//        corsConfiguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-//        corsConfiguration.setExposedHeaders(Arrays.asList("X-Auth-Token","Authorization","Access-Control-Allow-Origin","Access-Control-Allow-Credentials"));
-//
-//        source.registerCorsConfiguration("/**",corsConfiguration);
-//        FilterRegistrationBean<CorsFilter> bean =new FilterRegistrationBean(new CorsFilter(source));
-//        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-//        return bean;
-//    }
 }
