@@ -120,6 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<Customer> getAllCustomers(Pageable pageable) {
+
         return customerRepository.findAll(pageable);
     }
 

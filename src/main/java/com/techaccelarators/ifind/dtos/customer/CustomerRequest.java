@@ -26,8 +26,10 @@ public class CustomerRequest {
     private Long customerTypeId;
 
     private String imageUrl;
+
     @NotNull(message = "Bank id is required")
     private Long bankId;
+
     @NotNull(message = "Bank account number is required")
     private String accountNumber;
 
