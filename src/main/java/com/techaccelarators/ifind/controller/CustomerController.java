@@ -25,6 +25,7 @@ public class CustomerController {
 
     @PostMapping
     public Response<CustomerDto> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
+
         Customer customer = customerService.createCustomer(customerRequest);
         return new Response<CustomerDto>().buildSuccessResponse("Customer Created Successfully",
                 CustomerDto.of(customer), HttpStatus.CREATED);
@@ -64,6 +65,7 @@ public class CustomerController {
     }
     @GetMapping("/search")
     public Response<Page<CustomerDto>> searchCustomer(@RequestParam String searchParam, @PageableDefault Pageable pageable) {
+
         Page<Customer> customers = customerService.searchCustomer(searchParam, pageable);
         return new Response<Page<CustomerDto>>().buildSuccessResponse("SUCCESSFUL",
                 new PageImpl<>(CustomerDto.of(customers.getContent()),

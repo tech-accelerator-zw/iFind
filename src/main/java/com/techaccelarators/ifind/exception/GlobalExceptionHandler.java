@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -14,23 +15,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     //handles specific errors
-    @ExceptionHandler(value = RecordNotFoundException.class)
+    @ExceptionHandler(RecordNotFoundException.class)
     public final ResponseEntity<ErrorDetails> handleRecordNotFoundException(RecordNotFoundException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = InvalidRequestException.class)
+    @ExceptionHandler(InvalidRequestException.class)
     public final ResponseEntity<ErrorDetails> handleInvalidRequestException(InvalidRequestException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = NotImplementedException.class)
+    @ExceptionHandler(NotImplementedException.class)
     public final ResponseEntity<ErrorDetails> handleNotImplementedException(NotImplementedException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.I_AM_A_TEAPOT);

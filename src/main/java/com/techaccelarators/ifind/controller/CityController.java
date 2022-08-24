@@ -56,7 +56,6 @@ public class CityController {
 
     @GetMapping("/name")
     public Response<CityDto> getCityByName(@RequestParam String name) {
-
         City city = cityService.getCityByName(name);
         return new Response<CityDto>().buildSuccessResponse("FOUND",
                 CityDto.of(city), HttpStatus.FOUND);
