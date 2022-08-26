@@ -25,21 +25,19 @@ public class IFindApplication {
         SpringApplication.run(IFindApplication.class, args);
     }
 
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer()
-//    {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
-//                        .allowedOrigins("*")
-//                        .allowedHeaders("*")
-//                        .allowCredentials(false)
-//                        .maxAge(-1);
-//            }
-//        };
-//    }
+    @Bean
+    public FilterRegistrationBean corsFilterBean() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        FilterRegistrationBean corsFilter = new FilterRegistrationBean(new CorsFilter(source));
+        corsFilter.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return corsFilter;
+    }
 
 
 
