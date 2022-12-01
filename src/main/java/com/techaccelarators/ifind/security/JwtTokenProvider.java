@@ -39,7 +39,7 @@ public class JwtTokenProvider {
         if (user.getIsOtpRequired())
         {
             otpService.generateOtp(user.getUsername());
-            return null;
+            return "Check Your Email For The OTP";
         }
         return generateToken(authentication);
     }
