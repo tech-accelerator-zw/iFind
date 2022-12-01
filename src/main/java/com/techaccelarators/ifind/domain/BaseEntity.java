@@ -18,6 +18,7 @@ import java.io.Serializable;
 public class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @org.springframework.data.annotation.Version

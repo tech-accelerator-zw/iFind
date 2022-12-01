@@ -32,12 +32,9 @@ public class JwtTokenProvider {
 
     public String createToken(Authentication authentication){
         String username = authentication.getName();
-        UserAccount user = userAccountRepository
-                .findByEmail(username)
+        UserAccount user = userAccountRepository.findByEmail(username)
                 .orElseThrow(() -> new EntityNotFoundException("User with username " + username + " not found!"));
-
-        if (user.getIsOtpRequired())
-        {
+        if (user.getIsOtpRequired()) {
             otpService.generateOtp(user.getUsername());
             return "Check Your Email For The OTP";
         }
@@ -58,13 +55,9 @@ public class JwtTokenProvider {
                 .compact();
     }
     public String createTokenAfterVerifiedOtp(String username) {
-        UserAccount user = userAccountRepository
-                .findByUsername(username)
+        UserAccount user = userAccountRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found!"));
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                user.getUsername(), user.getPassword());
-
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         return generateToken(authentication);
     }
     //get username from token

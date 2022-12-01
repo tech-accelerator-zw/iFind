@@ -19,6 +19,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -58,6 +59,18 @@ public class AuthController {
         return new ResponseEntity<>("User Registered Successfully",HttpStatus.OK);
 
     }
+    @PostMapping("/forgot-password")
+    public  ResponseEntity<?> forgotPassword(@RequestParam String email, HttpServletRequest request){
+        authService.forgotPassword(email,request);
+        return new ResponseEntity<>("A password reset link has been sent to "+email,HttpStatus.OK);
+    }
+
+    @PostMapping("/reset")
+    public  ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword){
+        authService.resetPassword(token, newPassword);
+        return new ResponseEntity<>("You have Successfully reset your password, Try Logging in with the new password",HttpStatus.OK);
+    }
+
     @PostMapping(value = "verify")
     public ResponseEntity<JwtAuthResponse> verifyOtp(@Valid @RequestBody VerifyTokenRequestDTO verifyTokenRequest) {
         String username = verifyTokenRequest.getUsername();
