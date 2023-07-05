@@ -20,5 +20,5 @@ public interface CustomerTypeService {
 
     CustomerType toggleCustomerTypeStatus(Long id);
 
-    void deleteCity(Long id);
+    void deleteCustomerType(Long id);
 }

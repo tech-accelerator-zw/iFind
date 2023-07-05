@@ -4,8 +4,10 @@ import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeDto;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;
+import com.techaccelarators.ifind.exception.*;
 import com.techaccelarators.ifind.service.ServiceTypeService;
 import com.techaccelarators.ifind.util.Response;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,23 +22,24 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1/service-type")
+@Tag(name = "Service Type Controller", description = "Rest Controller for Service Types")
 public class ServiceTypeController {
     private final ServiceTypeService serviceTypeService;
 
     @PostMapping
     public Response<ServiceTypeDto> createServiceType(@Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
-
         ServiceType serviceType = serviceTypeService.createServiceType(serviceTypeRequest);
         return new Response<ServiceTypeDto>().buildSuccessResponse("Service Type Created Successfully",
                 ServiceTypeDto.of(serviceType), HttpStatus.CREATED);
+
     }
 
     @PutMapping("/{id}")
     public Response<ServiceTypeDto> updateServiceType(@PathVariable Long id, @Valid @RequestBody ServiceTypeRequest serviceTypeRequest) {
-
         ServiceType serviceType = serviceTypeService.updateServiceType(id,serviceTypeRequest);
         return new Response<ServiceTypeDto>().buildSuccessResponse("Service Type Updated Successfully",
                 ServiceTypeDto.of(serviceType), HttpStatus.OK);
+
     }
 
     @GetMapping
@@ -52,23 +55,26 @@ public class ServiceTypeController {
 
         return new Response<ServiceTypeResponseDto>().buildSuccessResponse("FOUND",
                 serviceTypeService.getServiceTypeById(id), HttpStatus.FOUND);
+
     }
 
     @GetMapping("/name")
     public Response<ServiceTypeDto> getServiceTypeByName(@RequestParam String name) {
 
         ServiceType serviceType = serviceTypeService.getServiceTypeByName(name);
-        return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",
-                ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
+            return new Response<ServiceTypeDto>().buildSuccessResponse("FOUND",
+                    ServiceTypeDto.of(serviceType), HttpStatus.FOUND);
+
     }
 
     @GetMapping("/search")
-    public Response<Page<ServiceTypeDto>> searchCustomer(@RequestParam String searchParam, @PageableDefault Pageable pageable) {
+    public Response<Page<ServiceTypeDto>> searchServiceType(@RequestParam String searchParam, @PageableDefault Pageable pageable) {
 
         Page<ServiceType> serviceTypes = serviceTypeService.searchServiceType(searchParam, pageable);
-        return new Response<Page<ServiceTypeDto>>().buildSuccessResponse("SUCCESSFUL",
+        return new Response<Page<ServiceTypeDto>>().buildSuccessResponse("SUCCESS",
                 new PageImpl<>(ServiceTypeDto.of(serviceTypes.getContent()),
                         pageable, serviceTypes.getTotalElements()),HttpStatus.OK);
+
     }
 
     @PutMapping("/{id}/status")
@@ -81,8 +87,7 @@ public class ServiceTypeController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Response<?> deleteCustomer(@PathVariable Long id) {
-
+    public Response<?> deleteServiceType(@PathVariable Long id) {
         serviceTypeService.deleteServiceType(id);
         return new Response<>().buildSuccessResponse("ServiceType Deleted Successfully",HttpStatus.OK);
     }

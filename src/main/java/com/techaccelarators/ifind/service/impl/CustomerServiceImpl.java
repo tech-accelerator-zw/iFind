@@ -4,8 +4,7 @@ import com.techaccelarators.ifind.domain.*;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.customer.CustomerRequest;
 import com.techaccelarators.ifind.dtos.customer.CustomerResponseDto;
-import com.techaccelarators.ifind.exception.InvalidRequestException;
-import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.exception.*;
 import com.techaccelarators.ifind.repository.CustomerRepository;
 import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.repository.ServiceTypeRepository;
@@ -17,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -104,9 +105,21 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(Long id) {
-        Customer customer = getById(id);
-        customerRepository.delete(customer);
+    public void deleteCustomer(Long id) throws UnauthorizedException, ForbiddenException, InternalServerErrorException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new UnauthorizedException("Unauthorized");
+        }
+        String role = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        if (!role.equals("ADMIN")) {
+            throw new ForbiddenException("Forbidden");
+        }
+        try {
+            Customer customer = getById(id);
+            customerRepository.delete(customer);
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Failed to delete the customer");
+        }
     }
 
     @Override

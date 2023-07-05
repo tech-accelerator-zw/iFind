@@ -6,14 +6,15 @@ import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeRequest;
 import com.techaccelarators.ifind.dtos.servicetype.ServiceTypeResponseDto;
-import com.techaccelarators.ifind.exception.InvalidRequestException;
-import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.exception.*;
 import com.techaccelarators.ifind.repository.CustomerServiceRepository;
 import com.techaccelarators.ifind.repository.ServiceTypeRepository;
 import com.techaccelarators.ifind.service.ServiceTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -104,7 +105,21 @@ public class ServiceTypeImpl implements ServiceTypeService {
 
     @Override
     public void deleteServiceType(Long id) {
-        ServiceType serviceType = getServiceById(id);
-        serviceTypeRepository.delete(serviceType);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new UnauthorizedException("Unauthorized");
+        }
+        String role = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        if (!role.equals("ADMIN")) {
+            throw new ForbiddenException("Forbidden");
+        }
+        try {
+            ServiceType serviceType = getServiceById(id);
+            serviceTypeRepository.delete(serviceType);
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Failed to delete the service type");
+        }
+
     }
 }

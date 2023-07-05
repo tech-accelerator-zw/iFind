@@ -3,14 +3,18 @@ package com.techaccelarators.ifind.service.impl;
 import com.techaccelarators.ifind.domain.City;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.city.CityRequestDto;
+import com.techaccelarators.ifind.exception.ForbiddenException;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.exception.UnauthorizedException;
 import com.techaccelarators.ifind.repository.CityRepository;
 import com.techaccelarators.ifind.service.CityService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +24,23 @@ public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
     @Override
     public void deleteCity(Long id) {
-        City city = getCityById(id);
-        cityRepository.delete(city);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new UnauthorizedException("Unauthorized");
+        }
+        String role = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        if (!role.equals("ADMIN")) {
+            throw new ForbiddenException("Forbidden");
+        }
+        try {
+            City city = getCityById(id);
+            cityRepository.delete(city);
+        } catch (RecordNotFoundException e){
+            throw new RecordNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete the service type");
+        }
+
     }
 
     @Override

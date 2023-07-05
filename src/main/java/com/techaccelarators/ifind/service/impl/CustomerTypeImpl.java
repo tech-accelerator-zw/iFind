@@ -1,16 +1,18 @@
 package com.techaccelarators.ifind.service.impl;
 
 import com.techaccelarators.ifind.domain.CustomerType;
+import com.techaccelarators.ifind.domain.ServiceType;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.customer.CustomerTypeRequest;
-import com.techaccelarators.ifind.exception.InvalidRequestException;
-import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.exception.*;
 import com.techaccelarators.ifind.repository.CustomerTypeRepository;
 import com.techaccelarators.ifind.service.CustomerTypeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,12 +33,10 @@ public class CustomerTypeImpl implements CustomerTypeService {
     @Override
     public CustomerType updateCustomerType(Long id, CustomerTypeRequest customerTypeRequest) {
         CustomerType customerType = getCustomerTypeById(id);
-        checkUnique(customerTypeRequest, id);
-        customerType.setName(customerTypeRequest.getName());
         if(customerTypeRepository.existsByName(customerTypeRequest.getName())){
             throw new InvalidRequestException("CustomerType Name Already In Use");
         }
-
+        customerType.setName(customerTypeRequest.getName());
         return customerTypeRepository.save(customerType);
     }
 
@@ -80,9 +80,22 @@ public class CustomerTypeImpl implements CustomerTypeService {
     }
 
     @Override
-    public void deleteCity(Long id) {
-        CustomerType customerType = getCustomerTypeById(id);
-        customerTypeRepository.delete(customerType);
+    public void deleteCustomerType(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new UnauthorizedException("Unauthorized");
+        }
+        String role = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        if (!role.equals("ADMIN")) {
+            throw new ForbiddenException("Forbidden");
+        }
+        try {
+            CustomerType customerType = getCustomerTypeById(id);
+            customerTypeRepository.delete(customerType);
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Failed to delete the service type");
+        }
+
     }
 
     private void checkUnique(CustomerTypeRequest request, Long id) {

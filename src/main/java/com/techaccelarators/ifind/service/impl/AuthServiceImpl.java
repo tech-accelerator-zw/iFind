@@ -4,10 +4,14 @@ import com.techaccelarators.ifind.domain.Role;
 import com.techaccelarators.ifind.domain.UserAccount;
 import com.techaccelarators.ifind.domain.UserRole;
 import com.techaccelarators.ifind.domain.enums.Status;
+import com.techaccelarators.ifind.dtos.VerifyTokenRequestDTO;
+import com.techaccelarators.ifind.dtos.security.JwtAuthResponse;
 import com.techaccelarators.ifind.dtos.security.LoginDto;
 import com.techaccelarators.ifind.dtos.security.SignUpDto;
+import com.techaccelarators.ifind.exception.InternalServerErrorException;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.exception.UnauthorizedException;
 import com.techaccelarators.ifind.repository.RoleRepository;
 import com.techaccelarators.ifind.repository.UserAccountRepository;
 import com.techaccelarators.ifind.repository.UserRoleRepository;
@@ -15,6 +19,7 @@ import com.techaccelarators.ifind.security.JwtTokenProvider;
 import com.techaccelarators.ifind.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +29,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -38,27 +44,19 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRoleRepository userRoleRepository;
     private final JwtTokenProvider tokenProvider;
-
+    private final OtpService otpService;
     private final JavaMailSender emailSender;
-
-
-
     @Override
-    public String authenticateUser(LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginDto.getUsernameOrEmail(), loginDto.getPassword()
-        );
-        try
-        {
+    public JwtAuthResponse authenticateUser(LoginDto loginDto) {
+        UsernamePasswordAuthenticationToken authenticationToken = new
+                UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword());
+        try {
             Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
             String token = tokenProvider.createToken(authentication);
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            return token;
-        }
-        catch (AuthenticationException exception) {
-            return "Unauthorized";
+            return new JwtAuthResponse(token);
+        } catch (AuthenticationException exception) {
+            throw new UnauthorizedException("Unauthorized");
         }
     }
 
@@ -87,22 +85,8 @@ public class AuthServiceImpl implements AuthService {
 
         userAccountRepository.save(userAccount);
     }
-
-    public String findEmailByUsername(String username) {
-        Optional<UserAccount> user = userAccountRepository.findByUsername(username);
-        if (user.isPresent()) {
-            return user.get().getEmail();
-        }
-        return null;
-    }
-
     @Override
-    public UserAccount getUserAccountByPasswordResetToken(String passwordResetToken) {
-        return userAccountRepository.findByPasswordResetToken(passwordResetToken)
-                .orElseThrow(()-> new RecordNotFoundException("User Not Found!"));
-    }
-
-    @Override
+    @Transactional
     public void forgotPassword(String email, HttpServletRequest request) {
         UserAccount user = userAccountRepository.findByEmail(email)
                 .orElseThrow(()-> new RecordNotFoundException(String.format("No user with email %s was found",email)));
@@ -116,8 +100,24 @@ public class AuthServiceImpl implements AuthService {
         passwordResetEmail.setSubject("Password Reset Request");
         passwordResetEmail.setText("To reset your password, click the link below:\n" + appUrl
                 + "/reset?token=" + user.getPasswordResetToken());
+        try {
+            emailSender.send(passwordResetEmail);
+        }catch (MailException exception){
+           throw new InternalServerErrorException(exception.getMessage());
+        }
 
-        emailSender.send(passwordResetEmail);
+    }
+
+    @Override
+    public JwtAuthResponse verifyOtp(VerifyTokenRequestDTO verifyTokenRequest) {
+        String username = verifyTokenRequest.getUsername();
+        Integer otp = verifyTokenRequest.getOtp();
+        boolean isOtpValid = otpService.validateOTP(username, otp);
+        if (!isOtpValid) {
+            throw new UnauthorizedException("Unauthorized");
+        }
+        String token = tokenProvider.createTokenAfterVerifiedOtp(username);
+        return new JwtAuthResponse(token);
     }
 
     @Override

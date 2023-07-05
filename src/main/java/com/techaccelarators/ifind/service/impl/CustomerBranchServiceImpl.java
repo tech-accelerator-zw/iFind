@@ -1,11 +1,14 @@
 package com.techaccelarators.ifind.service.impl;
 
+import com.techaccelarators.ifind.domain.City;
 import com.techaccelarators.ifind.domain.Customer;
 import com.techaccelarators.ifind.domain.CustomerBranch;
 import com.techaccelarators.ifind.domain.enums.Status;
 import com.techaccelarators.ifind.dtos.branch.CustomerBranchRequest;
+import com.techaccelarators.ifind.exception.ForbiddenException;
 import com.techaccelarators.ifind.exception.InvalidRequestException;
 import com.techaccelarators.ifind.exception.RecordNotFoundException;
+import com.techaccelarators.ifind.exception.UnauthorizedException;
 import com.techaccelarators.ifind.repository.CustomerBranchRepository;
 import com.techaccelarators.ifind.repository.CustomerRepository;
 import com.techaccelarators.ifind.service.CustomerBranchService;
@@ -14,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -93,8 +98,21 @@ public class CustomerBranchServiceImpl implements CustomerBranchService {
 
     @Override
     public void deleteCustomerBranch(Long id) {
-        CustomerBranch customerBranch = getCustomerBranchById(id);
-        customerBranchRepository.delete(customerBranch);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new UnauthorizedException("Unauthorized");
+        }
+        String role = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        if (!role.equals("ADMIN")) {
+            throw new ForbiddenException("Forbidden");
+        }
+        try {
+            CustomerBranch customerBranch = getCustomerBranchById(id);
+            customerBranchRepository.delete(customerBranch);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete the service type");
+        }
+
     }
 
     private void checkUnique(CustomerBranchRequest request, Long id) {

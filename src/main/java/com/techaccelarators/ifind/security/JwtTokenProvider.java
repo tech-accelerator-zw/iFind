@@ -40,8 +40,6 @@ public class JwtTokenProvider {
         }
         return generateToken(authentication);
     }
-
-    //generate token
     public String generateToken(Authentication authentication){
         String username = authentication.getName();
         Date currentDate = new Date();
@@ -60,7 +58,6 @@ public class JwtTokenProvider {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         return generateToken(authentication);
     }
-    //get username from token
     public String getUsernameFromJwt(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -68,7 +65,6 @@ public class JwtTokenProvider {
                 .getBody();
         return claims.getSubject();
     }
-    //validate jwt token
     public boolean validateToken(String token){
         try{
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);

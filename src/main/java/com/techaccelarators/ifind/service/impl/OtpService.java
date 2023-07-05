@@ -21,67 +21,33 @@ public class OtpService {
     private UserService userService;
     @Value("${spring.mail.username}")
     private String username;
-
-    /**
-     * Constructor dependency injector
-     * @param otpGenerator - otpGenerator dependency
-     * @param emailService - email service dependency
-     * @param userService - user service dependency
-     */
     public OtpService(OtpGenerator otpGenerator, EmailService emailService, UserService userService)
     {
         this.otpGenerator = otpGenerator;
         this.emailService = emailService;
         this.userService = userService;
     }
-
-    /**
-     * Method for generate OTP number
-     *
-     * @param key - provided key (username in this case)
-     * @return boolean value (true|false)
-     */
-    public Boolean generateOtp(String key)
-    {
-        // generate otp
+    public Boolean generateOtp(String key) {
         Integer otpValue = otpGenerator.generateOTP(key);
         if (otpValue == -1) {
             LOGGER.error("OTP generator is not working...");
             return  false;
         }
-
         LOGGER.info("Generated OTP: {}", otpValue);
-
-        // fetch user e-mail from database
         String userEmail = userService.findEmailByUsername(key);
         List<String> recipients = new ArrayList<>();
         recipients.add(userEmail);
 
-        // generate emailDTO object
         EmailDTO emailDTO = new EmailDTO();
         emailDTO.setSubject("Here's your One Time Password (OTP) - Expire in 5 minutes!");
         emailDTO.setBody("OTP Password: " + otpValue);
         emailDTO.setRecipients(recipients);
 
-        // send generated e-mail
         return emailService.sendSimpleMessage(emailDTO);
     }
-
-
-
-    /**
-     * Method for validating provided OTP
-     *
-     * @param key - provided key
-     * @param otpNumber - provided OTP number
-     * @return boolean value (true|false)
-     */
-    public Boolean validateOTP(String key, Integer otpNumber)
-    {
-        // get OTP from cache
+    public Boolean validateOTP(String key, Integer otpNumber) {
         Integer cacheOTP = otpGenerator.getOPTByKey(key);
-        if (cacheOTP!=null && cacheOTP.equals(otpNumber))
-        {
+        if (cacheOTP!=null && cacheOTP.equals(otpNumber)) {
             otpGenerator.clearOTPFromCache(key);
             return true;
         }
