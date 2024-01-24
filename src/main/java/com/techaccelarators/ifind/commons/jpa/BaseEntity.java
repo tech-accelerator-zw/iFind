@@ -1,7 +1,7 @@
-package com.techaccelarators.ifind.common.jpa;
+package com.techaccelarators.ifind.commons.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.techaccelarators.ifind.common.encryption.RegisteredEncryptors;
+import com.techaccelarators.ifind.commons.encryption.RegisteredEncryptors;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.Getter;
 import lombok.val;
@@ -36,7 +36,7 @@ public class BaseEntity implements Serializable {
 
     @Version
     @JsonIgnore
-    private Integer version;
+    private Long version;
 
     @PrePersist
     void setupUuid() {

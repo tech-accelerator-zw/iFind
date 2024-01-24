@@ -1,13 +1,11 @@
 package com.techaccelarators.ifind.domain;
 
-import com.techaccelarators.ifind.common.jpa.DefaultIdentifierAuditedEntity;
+import com.techaccelarators.ifind.commons.jpa.DefaultIdentifierAuditedEntity;
 import com.techaccelarators.ifind.domain.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;

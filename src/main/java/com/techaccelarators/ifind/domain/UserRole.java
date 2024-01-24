@@ -1,8 +1,7 @@
 package com.techaccelarators.ifind.domain;
 
-import com.techaccelarators.ifind.common.jpa.DefaultIdentifierAuditedEntity;
+import com.techaccelarators.ifind.commons.jpa.DefaultIdentifierAuditedEntity;
 import com.techaccelarators.ifind.domain.enums.Status;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

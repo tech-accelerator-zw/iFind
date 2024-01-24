@@ -1,4 +1,4 @@
-package com.techaccelarators.ifind.common.encryption;
+package com.techaccelarators.ifind.commons.encryption;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.techaccelarators.ifind.common.jpa;
+package com.techaccelarators.ifind.commons.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
