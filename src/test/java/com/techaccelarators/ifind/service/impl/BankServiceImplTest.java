@@ -49,7 +49,6 @@ class BankServiceImplTest {
         bankRequestDto.setName("First Capital Bank");
 
         bank = Bank.builder().name("First Capital Bank").build();
-        bank.setId(1L);
         bank.setStatus(Status.ACTIVE);
     }
 

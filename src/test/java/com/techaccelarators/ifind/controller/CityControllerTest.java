@@ -58,16 +58,15 @@ class CityControllerTest {
         this.cityController = new CityController(cityService);
     }
 
-    City RECORD_1 = new City("Harare");
-    City RECORD_2 = new City("Mutare");
-    City RECORD_3 = new City("Bulawayo");
+    City RECORD_1 = new City("Harare",Status.ACTIVE);
+    City RECORD_2 = new City("Mutare",Status.ACTIVE);
+    City RECORD_3 = new City("Bulawayo",Status.ACTIVE);
 
     @Test
     @DisplayName("createCitySuccess")
     void createCity() {
         CityRequestDto cityRequestDto = new CityRequestDto("Kwekwe");
         City city = new City();
-        city.setId(3L);
         city.setName(cityRequestDto.getName());
 
         when(cityService.createCity(any(CityRequestDto.class))).thenReturn(city);
@@ -85,7 +84,6 @@ class CityControllerTest {
     void updateCity() {
         CityRequestDto cityRequestDto = new CityRequestDto();
         City city = new City();
-        city.setId(1L);
         when(cityService.updateCity(city.getId(),cityRequestDto)).thenReturn(city);
 
         Response<CityDto> response = cityController.updateCity(city.getId(),cityRequestDto);
@@ -128,7 +126,6 @@ class CityControllerTest {
     @Test
     @DisplayName("getCityByIdSuccess")
     void getCityByIdSuccess() {
-        RECORD_1.setId(1L);
 
         when(cityService.getCityById(RECORD_1.getId())).thenReturn(RECORD_1);
         Response<CityDto> response = cityController.getCityById(1L);
@@ -217,7 +214,6 @@ class CityControllerTest {
     @Test
     @DisplayName("toggleCityStatus")
     void toggleCityStatus() {
-        RECORD_1.setId(1L);
         RECORD_1.setStatus(Status.ACTIVE);
 
         when(cityService.toggleCityStatus(1L)).thenReturn(RECORD_1);
@@ -236,7 +232,6 @@ class CityControllerTest {
     @DisplayName("deleteCitySuccess")
     void deleteCity() {
         // Arrange
-        RECORD_1.setId(1L);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ADMIN"));
         Authentication authentication = new UsernamePasswordAuthenticationToken("username","password",authorities);

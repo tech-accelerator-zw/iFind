@@ -56,7 +56,6 @@ class CustomerControllerTest {
 
         CustomerRequest customerRequest = new CustomerRequest();
         Customer customer = new Customer();
-        customer.setId(1L);
         customer.setName("tyfah");
         when(customerService.createCustomer(customerRequest)).thenReturn(customer);
 
@@ -97,7 +96,6 @@ class CustomerControllerTest {
         request.setDescription("Test Customer");
 
         Customer customer = new Customer();
-        customer.setId(id);
         customer.setName(request.getName());
         customer.setDescription(request.getDescription());
 
@@ -232,7 +230,6 @@ class CustomerControllerTest {
 
     @Test
     void toggleCustomerStatus() {
-        RECORD_1.setId(1L);
         RECORD_1.setStatus(Status.ACTIVE);
 
         when(customerService.toggleCustomerStatus(1L)).thenReturn(RECORD_1);

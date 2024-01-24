@@ -48,9 +48,7 @@ class CityServiceImplTest {
         CityRequestDto cityRequestDto = new CityRequestDto();
         cityRequestDto.setName("Harare");
 
-        city = new City("TestCity");
-        city.setId(1L);
-        city.setStatus(Status.ACTIVE);
+        city = new City("TestCity",Status.ACTIVE);
     }
 
     @Test

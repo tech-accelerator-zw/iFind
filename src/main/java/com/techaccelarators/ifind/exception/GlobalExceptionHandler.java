@@ -18,48 +18,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     //handles specific errors
     @ExceptionHandler(RecordNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
-    public final ResponseEntity<ErrorDetails> handleRecordNotFoundException(RecordNotFoundException exception, WebRequest webRequest) {
+    protected final ResponseEntity<ErrorDetails> handleRecordNotFoundException(RecordNotFoundException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidRequestException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public final ResponseEntity<ErrorDetails> handleInvalidRequestException(InvalidRequestException exception, WebRequest webRequest) {
+    protected final ResponseEntity<ErrorDetails> handleInvalidRequestException(InvalidRequestException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(UnauthorizedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ResponseBody
-    public final ResponseEntity<ErrorDetails> handleUnauthorizedException(UnauthorizedException exception, WebRequest webRequest) {
+    protected final ResponseEntity<ErrorDetails> handleUnauthorizedException(UnauthorizedException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(ForbiddenException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ResponseBody
-    public final ResponseEntity<ErrorDetails> handleForbiddenException(ForbiddenException exception, WebRequest webRequest) {
+    protected final ResponseEntity<ErrorDetails> handleForbiddenException(ForbiddenException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(NotImplementedException.class)
-    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-    @ResponseBody
-    public final ResponseEntity<ErrorDetails> handleNotImplementedException(NotImplementedException exception, WebRequest webRequest) {
+    protected final ResponseEntity<ErrorDetails> handleNotImplementedException(NotImplementedException exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.I_AM_A_TEAPOT);
     }
 
     //handles global errors
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest webRequest) {
+    protected ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest webRequest) {
         exception.printStackTrace();
         ErrorDetails errorDetails = new ErrorDetails(new Date(),exception.getMessage(),webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails,

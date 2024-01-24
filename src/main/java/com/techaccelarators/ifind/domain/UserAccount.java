@@ -1,9 +1,13 @@
 package com.techaccelarators.ifind.domain;
 
+import com.techaccelarators.ifind.common.jpa.DefaultIdentifierAuditedEntity;
+import com.techaccelarators.ifind.domain.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,17 +16,23 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Data
+@Entity
+@Table(name = "user_account",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "user_name"),
+                @UniqueConstraint(columnNames = "uuid"),
+                @UniqueConstraint(columnNames = "email"),
+        }
+)
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
-@Table(name = "user_account")
-public class UserAccount extends BaseEntity{
-    @Column(name = "user_name",unique = true)
+public class UserAccount extends DefaultIdentifierAuditedEntity {
+    @Column(name = "user_name")
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false)
     @Email(message = "Please provide a valid e-mail")
     private String email;
 
@@ -52,4 +62,7 @@ public class UserAccount extends BaseEntity{
 
     @Column(name = "last_password_reset_date")
     private Date lastPasswordResetDate;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

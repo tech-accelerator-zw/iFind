@@ -51,9 +51,9 @@ class CustomerBranchControllerTest {
     Address address = new Address("21 Skymaster Belvedere","","Harare","Zimbabwe");
     ContactDetails contactDetails = new ContactDetails("+2637890654","0789654789","test@junit.com");
 
-    CustomerBranch RECORD_1 = new CustomerBranch("Msasa",address,contactDetails);
-    CustomerBranch RECORD_2 = new CustomerBranch("Willovale",address,contactDetails);
-    CustomerBranch RECORD_3 = new CustomerBranch("Mazowe",address,contactDetails);
+    CustomerBranch RECORD_1 = new CustomerBranch("Msasa",address,contactDetails,Status.ACTIVE);
+    CustomerBranch RECORD_2 = new CustomerBranch("Willovale",address,contactDetails,Status.ACTIVE);
+    CustomerBranch RECORD_3 = new CustomerBranch("Mazowe",address,contactDetails,Status.ACTIVE);
 
     @BeforeAll
     public void setUp(){
@@ -86,10 +86,8 @@ class CustomerBranchControllerTest {
     @DisplayName("updateCustomerBranchSuccess")
     void updateCustomerBranch() {
         Customer customer = new Customer();
-        customer.setId(3L);
         CustomerBranchRequest customerBranchRequest = new CustomerBranchRequest();
         CustomerBranch customerBranch = new CustomerBranch();
-        customerBranch.setId(1L);
 
         when(customerBranchService.updateCustomerBranch(customer.getId(),customerBranch.getId(),customerBranchRequest))
                 .thenReturn(customerBranch);
@@ -104,7 +102,6 @@ class CustomerBranchControllerTest {
     @Test
     @DisplayName("getCustomerBranchByIdSuccess")
     void getCustomerBranchById() {
-        RECORD_3.setId(5L);
 
         when(customerBranchService.getCustomerBranchById(RECORD_3.getId())).thenReturn(RECORD_3);
         Response<CustomerBranchDto> response = customerBranchController.getCustomerBranchById(RECORD_3.getId());
@@ -136,7 +133,6 @@ class CustomerBranchControllerTest {
         RECORD_1.setStatus(Status.ACTIVE);
         RECORD_2.setStatus(Status.ACTIVE);
         Set<CustomerBranch> customerBranches = Set.of(RECORD_1,RECORD_2);
-        customer.setId(1L);
         customer.setCustomerBranches(customerBranches);
 
         Page<CustomerBranch> branches = new PageImpl<>(Arrays.asList(RECORD_1,RECORD_2),pageable,2L);
@@ -152,7 +148,6 @@ class CustomerBranchControllerTest {
     @Test
     @DisplayName("getActiveCustomerBranchesThrowsRecordNotFoundException")
     void getActiveCustomerBranchesWithWrongCustomerId() {
-        customer.setId(1L);
 
         when(customerBranchService.getAllActiveCustomerBranches(customer.getId(), pageable)).thenThrow(new RecordNotFoundException("Customer with given id not found"));
 
@@ -162,7 +157,6 @@ class CustomerBranchControllerTest {
     @Test
     @DisplayName("getActiveCustomerBranchesEmptyList")
     void getActiveCustomerBranchesEmptyList() {
-        customer.setId(1L);
 
         Page<CustomerBranch> branches = new PageImpl<>(Collections.emptyList());
         when(customerBranchService.getAllActiveCustomerBranches(customer.getId(), pageable)).thenReturn(branches);
@@ -176,7 +170,6 @@ class CustomerBranchControllerTest {
 
     @Test
     void toggleCustomerStatus() {
-        RECORD_1.setId(1L);
         RECORD_1.setStatus(Status.ACTIVE);
 
         when(customerBranchService.toggleCustomerBranchStatus(1L)).thenReturn(RECORD_1);

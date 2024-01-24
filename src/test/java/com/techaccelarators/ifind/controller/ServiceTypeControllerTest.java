@@ -43,9 +43,9 @@ class ServiceTypeControllerTest {
         this.serviceTypeController = new ServiceTypeController(serviceTypeService);
     }
 
-    ServiceType RECORD_1 = new ServiceType("test","sajfgdlhagsouydgab");
-    ServiceType RECORD_2 = new ServiceType("test1","sgdlhagsouydgab");
-    ServiceType RECORD_3 = new ServiceType("test2","sajfhagsouydgab");
+    ServiceType RECORD_1 = new ServiceType("test","sajfgdlhagsouydgab",Status.ACTIVE);
+    ServiceType RECORD_2 = new ServiceType("test1","sgdlhagsouydgab",Status.ACTIVE);
+    ServiceType RECORD_3 = new ServiceType("test2","sajfhagsouydgab",Status.ACTIVE);
     ServiceTypeRequest serviceTypeRequest = new ServiceTypeRequest();
 
     @Test
@@ -165,7 +165,6 @@ class ServiceTypeControllerTest {
 
     @Test
     void toggleServiceTypeStatus() {
-        RECORD_1.setId(1L);
         RECORD_1.setStatus(Status.ACTIVE);
 
         when(serviceTypeService.toggleServiceTypeStatus(1L)).thenReturn(RECORD_1);

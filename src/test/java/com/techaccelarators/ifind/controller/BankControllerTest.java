@@ -42,9 +42,9 @@ class BankControllerTest {
     @InjectMocks
     private BankController bankController;
 
-    Bank RECORD_1 = new Bank("Ecobank");
-    Bank RECORD_2 = new Bank("CABS");
-    Bank RECORD_3 = new Bank("Steward Bank");
+    Bank RECORD_1 = new Bank("Ecobank",Status.ACTIVE);
+    Bank RECORD_2 = new Bank("CABS",Status.ACTIVE);
+    Bank RECORD_3 = new Bank("Steward Bank",Status.ACTIVE);
 
     @BeforeAll
     public void setUp(){
@@ -62,7 +62,6 @@ class BankControllerTest {
         //Arrange
         BankRequestDto bankRequestDto = new BankRequestDto("First Capital");
         Bank bank = new Bank();
-        bank.setId(4L);
         bank.setName(bankRequestDto.getName());
         when(bankService.createBank(any(BankRequestDto.class))).thenReturn(bank);
 
@@ -84,7 +83,6 @@ class BankControllerTest {
         // Arrange
         BankRequestDto bankRequestDto = new BankRequestDto();
         Bank bank = new Bank();
-        bank.setId(1L);
         Mockito.when(bankService.updateBank(bank.getId(), bankRequestDto)).thenReturn(bank);
 
         // Act
@@ -136,7 +134,6 @@ class BankControllerTest {
     @DisplayName("getBankByIdSuccess")
     void getBankById() {
         // Arrange
-        RECORD_1.setId(1L);
         when(bankService.getBankById(RECORD_1.getId())).thenReturn(RECORD_1);
         // Act
         Response<BankDto> response = bankController.getBankById(1L);
@@ -236,7 +233,6 @@ class BankControllerTest {
     @DisplayName("toggleBankStatusSuccess")
     void toggleBankStatus() {
         // Arrange
-        RECORD_1.setId(1L);
         RECORD_1.setStatus(Status.ACTIVE);
         when(bankService.toggleBankStatus(1l)).thenReturn(RECORD_1);
         // Act
@@ -254,7 +250,6 @@ class BankControllerTest {
     @DisplayName("deleteBankSuccessfully")
     public void testDeleteBank_success() {
         // Arrange
-        RECORD_1.setId(1L);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ADMIN"));
         Authentication authentication = new UsernamePasswordAuthenticationToken("user", "password", authorities);

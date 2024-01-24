@@ -46,14 +46,14 @@ class CustomerTypeControllerTest {
         this.customerTypeController = new CustomerTypeController(customerTypeService);
     }
 
-    CustomerType RECORD_1 = new CustomerType("Consultancy");
-    CustomerType RECORD_2 = new CustomerType("Pharmacy");
-    CustomerType RECORD_3 = new CustomerType("Gardner");
+    CustomerType RECORD_1 = new CustomerType("Consultancy",Status.ACTIVE);
+    CustomerType RECORD_2 = new CustomerType("Pharmacy",Status.ACTIVE);
+    CustomerType RECORD_3 = new CustomerType("Gardner",Status.ACTIVE);
 
     @Test
     void createCustomerTypeSuccess() {
         CustomerTypeRequest customerTypeRequest = new CustomerTypeRequest();
-        CustomerType customerType = new CustomerType("test");
+        CustomerType customerType = new CustomerType("test",Status.ACTIVE);
 
         when(customerTypeService.createCustomerType(customerTypeRequest)).thenReturn(customerType);
 
@@ -80,7 +80,7 @@ class CustomerTypeControllerTest {
         Long id = 3L;
         CustomerTypeRequest customerTypeRequest = new CustomerTypeRequest();
 
-        CustomerType customerType = new CustomerType("123");
+        CustomerType customerType = new CustomerType("123",Status.ACTIVE);
 
         when(customerTypeService.updateCustomerType(id,customerTypeRequest)).thenReturn(customerType);
 
@@ -139,7 +139,6 @@ class CustomerTypeControllerTest {
 
     @Test
     void getCustomerTypeByIdSuccess() {
-        RECORD_1.setId(1L);
         when(customerTypeService.getCustomerTypeById(RECORD_1.getId())).thenReturn(RECORD_1);
 
         Response<CustomerTypeDto> response = customerTypeController.getCustomerTypeById(RECORD_1.getId());
@@ -199,7 +198,6 @@ class CustomerTypeControllerTest {
 
     @Test
     void toggleCustomerTypeStatus() {
-        RECORD_1.setId(1L);
         RECORD_1.setStatus(Status.ACTIVE);
 
         when(customerTypeService.toggleCustomerTypeStatus(1L)).thenReturn(RECORD_1);

@@ -1,21 +1,38 @@
 package com.techaccelarators.ifind.domain;
 
+import com.techaccelarators.ifind.common.jpa.DefaultIdentifierAuditedEntity;
+import com.techaccelarators.ifind.domain.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "city")
-@Data
+@Table(name = "city",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "name"),
+                @UniqueConstraint(columnNames = "uuid"),
+        }
+)
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class City extends BaseEntity{
+public class City extends DefaultIdentifierAuditedEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
